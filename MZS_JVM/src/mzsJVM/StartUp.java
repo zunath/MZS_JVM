@@ -52,6 +52,7 @@ public class StartUp {
 		Scheduler.addSchedulerListener(new Module_OnClientLeave());
 		Scheduler.addSchedulerListener(new Module_OnCutsceneAbort());
 		Scheduler.addSchedulerListener(new Module_OnHeartbeat());
+		Scheduler.addSchedulerListener(new Module_OnLoad());
 		Scheduler.addSchedulerListener(new Module_OnPlayerChat());
 		Scheduler.addSchedulerListener(new Module_OnPlayerDeath());
 		Scheduler.addSchedulerListener(new Module_OnPlayerDying());
@@ -62,6 +63,8 @@ public class StartUp {
 		Scheduler.addSchedulerListener(new Module_OnPlayerUnEquipItem());
 		Scheduler.addSchedulerListener(new Module_OnUnAcquireItem());
 		Scheduler.addSchedulerListener(new Module_OnUserDefined());
+
+		Scheduler.addSchedulerListener(new Test());
 	}
 	
 	/**

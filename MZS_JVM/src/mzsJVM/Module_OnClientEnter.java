@@ -7,6 +7,6 @@ public class Module_OnClientEnter implements SchedulerListener {
 	public void context(NWObject objSelf) {}
 	
 	public void event(NWObject objSelf, String event) {
-            
+		NWScript.executeScript("x3_mod_def_enter", objSelf);
 	}
 }

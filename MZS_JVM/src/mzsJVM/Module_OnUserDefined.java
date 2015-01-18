@@ -7,6 +7,6 @@ public class Module_OnUserDefined implements SchedulerListener {
 	public void context(NWObject objSelf) {}
 	
 	public void event(NWObject objSelf, String event) {
-            
+
 	}
 }

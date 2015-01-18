@@ -84,6 +84,7 @@ public class Module_OnActivateItem implements SchedulerListener {
 							Talkvolume.TALK);
 				}
 			});
+			Scheduler.flushQueues();
 
 			return;
 		}
@@ -218,6 +219,7 @@ public class Module_OnActivateItem implements SchedulerListener {
 							NWScript.getItemActivator());
 				}
 			});
+			Scheduler.flushQueues();
 
 			// NWScript.delayCommand(30.0f,
 			// NWScript.setStandardFactionReputation(StandardFaction.HOSTILE, 0,
@@ -256,6 +258,8 @@ public class Module_OnActivateItem implements SchedulerListener {
 								true, false);
 					}
 				});
+				Scheduler.flushQueues();
+
 			} else {
 				NWScript.sendMessageToPC(oPC, "That is not a valid item");
 			}
@@ -272,6 +276,7 @@ public class Module_OnActivateItem implements SchedulerListener {
 							true, false);
 				}
 			});
+			Scheduler.flushQueues();
 
 			NWScript.destroyObject(oItem, 0.0f);
 		}
@@ -291,6 +296,7 @@ public class Module_OnActivateItem implements SchedulerListener {
 							false);
 				}
 			});
+			Scheduler.flushQueues();
 		}
 
 		else if (sCure == "cure_") {
@@ -320,6 +326,8 @@ public class Module_OnActivateItem implements SchedulerListener {
 						NWScript.jumpToObject(waypoint, false);
 					}
 				});
+				Scheduler.flushQueues();
+
 				NWScript.createObject(ObjectType.WAYPOINT, "playerwp_",
 						lPCLocation, false, "Playerwp_ " + sPCNAME);
 			}

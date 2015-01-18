@@ -7,6 +7,6 @@ public class Module_OnPlayerRest implements SchedulerListener {
 	public void context(NWObject objSelf) {}
 	
 	public void event(NWObject objSelf, String event) {
-            
+		NWScript.executeScript("x2_mod_def_rest", objSelf);
 	}
 }

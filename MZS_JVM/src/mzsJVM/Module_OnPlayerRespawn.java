@@ -7,6 +7,6 @@ public class Module_OnPlayerRespawn implements SchedulerListener {
 	public void context(NWObject objSelf) {}
 	
 	public void event(NWObject objSelf, String event) {
-            
+		NWScript.executeScript("nw_o0_respawn", objSelf);
 	}
 }
