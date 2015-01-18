@@ -13,18 +13,7 @@ public class NWNX_Areas {
 
     public static void DestroyArea(NWObject oArea)
     {
-        NWObject[] pcs = NWScript.getPCs();
-
-        if(pcs.length > 0)
-        {
-            NWScript.sendMessageToPC(NWScript.getPCs()[0], "ObjectID = " + oArea.getObjectId() + ", ToString() = " + oArea.toString()); // DEBUG
-        }
-        else
-        {
-
-        }
-
-        //NWScript.setLocalString(NWObject.MODULE, "NWNX!AREAS!DESTROY_AREA", oArea.getObjectId());
+        NWScript.setLocalString(NWObject.MODULE, "NWNX!AREAS!DESTROY_AREA", Integer.toString(oArea.getObjectId()));
     }
 
     public static void SetAreaName(NWObject oArea, String sName)

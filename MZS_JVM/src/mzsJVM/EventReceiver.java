@@ -4,9 +4,6 @@ import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
 import org.nwnx.nwnx2.jvm.SchedulerListener;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 public class EventReceiver implements SchedulerListener {
     public void postFlushQueues(int remainingTokens) {}
     public void missedToken(NWObject objSelf, String token) {}

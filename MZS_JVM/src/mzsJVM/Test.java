@@ -11,6 +11,6 @@ public class Test implements IScriptEventHandler {
 	public void runScript(NWObject objSelf) {
 		NWObject pc = NWScript.getLastUsedBy();
 
-		NWNX_Areas.DestroyArea(NWScript.getArea(pc));
+
 	}
 }
