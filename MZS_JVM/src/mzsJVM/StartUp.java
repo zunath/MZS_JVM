@@ -1,7 +1,7 @@
 package mzsJVM;
 import org.nwnx.nwnx2.jvm.*;
 
-public class Initialization {
+public class StartUp {
 
 	/**
 	 * Called before any configured classes and methods
@@ -9,6 +9,7 @@ public class Initialization {
 	 * class pathes and load plugins/custom classes that
 	 * are required to start up.
 	*/
+	@SuppressWarnings("unused")
 	private static void setup() {
 	}
 
@@ -17,6 +18,7 @@ public class Initialization {
 	 * Use this to do your usual initialisation - do not
 	 * use setup() for that.
 	*/
+	@SuppressWarnings("unused")
 	private static void init() {
 		setUpSchedulerListeners();
 
@@ -66,6 +68,7 @@ public class Initialization {
 	 * Called just before terminating the JVM. No NWN context
 	 * is available. Not called on errors or crashes.
 	 */
+	@SuppressWarnings("unused")
 	private static void shutdown() {
 	}
 }

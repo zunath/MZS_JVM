@@ -11,14 +11,11 @@ public class Module_OnAcquireItem implements SchedulerListener {
             
 		NWObject oPC = NWScript.getModuleItemAcquiredBy();
 	    NWObject oItem = NWScript.getModuleItemAcquired();
-	    NWObject oInventory1;
 	    String sTag = NWScript.getTag(oItem);
 	    NWObject oDataBase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
 	    NWObject oRenown = NWScript.getItemPossessedBy(oPC, "shsaward");
 	    int iRenown = NWScript.getLocalInt(oDataBase, "shs");
 	    int iRenownAward = NWScript.getLocalInt(oRenown, "shs");
-	    int iData = NWScript.getLocalInt(oDataBase, "zombified");
-	    int iNumber1;
 
 	    if (sTag == "_mdrn_ot_talkie")
 	    {
