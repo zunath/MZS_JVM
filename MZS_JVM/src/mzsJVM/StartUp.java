@@ -3,6 +3,8 @@ import org.nwnx.nwnx2.jvm.*;
 
 public class StartUp {
 
+	private static EventReceiver e = new EventReceiver();
+
 	/**
 	 * Called before any configured classes and methods
 	 * are looked up in jni. You can use this to setup
@@ -20,7 +22,7 @@ public class StartUp {
 	*/
 	@SuppressWarnings("unused")
 	private static void init() {
-		setUpSchedulerListeners();
+		Scheduler.addSchedulerListener(e);
 
 		/* Add some default handlers that don't do any
 		 * custom wrapping at all.
@@ -44,29 +46,6 @@ public class StartUp {
 
 	}
 
-	private static void setUpSchedulerListeners()
-	{
-		Scheduler.addSchedulerListener(new Module_OnAcquireItem());
-		Scheduler.addSchedulerListener(new Module_OnActivateItem());
-		Scheduler.addSchedulerListener(new Module_OnClientEnter());
-		Scheduler.addSchedulerListener(new Module_OnClientLeave());
-		Scheduler.addSchedulerListener(new Module_OnCutsceneAbort());
-		Scheduler.addSchedulerListener(new Module_OnHeartbeat());
-		Scheduler.addSchedulerListener(new Module_OnLoad());
-		Scheduler.addSchedulerListener(new Module_OnPlayerChat());
-		Scheduler.addSchedulerListener(new Module_OnPlayerDeath());
-		Scheduler.addSchedulerListener(new Module_OnPlayerDying());
-		Scheduler.addSchedulerListener(new Module_OnPlayerEquipItem());
-		Scheduler.addSchedulerListener(new Module_OnPlayerLevelUp());
-		Scheduler.addSchedulerListener(new Module_OnPlayerRespawn());
-		Scheduler.addSchedulerListener(new Module_OnPlayerRest());
-		Scheduler.addSchedulerListener(new Module_OnPlayerUnEquipItem());
-		Scheduler.addSchedulerListener(new Module_OnUnAcquireItem());
-		Scheduler.addSchedulerListener(new Module_OnUserDefined());
-
-		Scheduler.addSchedulerListener(new Test());
-	}
-	
 	/**
 	 * Called just before terminating the JVM. No NWN context
 	 * is available. Not called on errors or crashes.

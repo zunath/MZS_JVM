@@ -5,7 +5,7 @@ import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
 import org.nwnx.nwnx2.jvm.NWVector;
 
-public class APS {
+public class NWNX_APS {
 
     public static void SQLInitialize()
     {

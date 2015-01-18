@@ -3,17 +3,9 @@ import mzsJVM.Bioware.*;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.*;
 
-public class Module_OnActivateItem implements SchedulerListener {
-	public void postFlushQueues(int remainingTokens) {
-	}
-
-	public void missedToken(NWObject objSelf, String token) {
-	}
-
-	public void context(NWObject objSelf) {
-	}
-
-	public void event(NWObject objSelf, String event) {
+public class Module_OnActivateItem implements IScriptEventHandler {
+	@Override
+	public void runScript(NWObject objSelf) {
 		NWObject oPC = NWScript.getItemActivator();
 		NWObject oItem = NWScript.getItemActivated();
 		NWObject oItem2;

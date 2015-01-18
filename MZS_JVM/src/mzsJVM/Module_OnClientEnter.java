@@ -1,12 +1,10 @@
 package mzsJVM;
+
 import org.nwnx.nwnx2.jvm.*;
 
-public class Module_OnClientEnter implements SchedulerListener {
-	public void postFlushQueues(int remainingTokens) {}
-	public void missedToken(NWObject objSelf, String token) {}
-	public void context(NWObject objSelf) {}
-	
-	public void event(NWObject objSelf, String event) {
-		NWScript.executeScript("x3_mod_def_enter", objSelf);
-	}
+public class Module_OnClientEnter implements IScriptEventHandler {
+    @Override
+    public void runScript(NWObject objSelf) {
+        NWScript.executeScript("x3_mod_def_enter", objSelf);
+    }
 }
