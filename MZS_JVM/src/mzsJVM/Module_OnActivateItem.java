@@ -28,44 +28,44 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		NWLocation lPCLocation = NWScript.getLocation(oPC);
 
 		// PC Reload Widget [Hauntmaster - 11/6/2014]
-		if (sItemTag == "_mdrn_it_reload_pc") {
+		if (sItemTag.equals("_mdrn_it_reload_pc")) {
 			NWScript.executeScript("_mdrn_rof_reload", oPC);
 			return;
 		}
 
 		// SUBDUAL HANDLER - Skeet - 7/4/10
-		if (sItemTag == "SubdualModeTog") {
+		if (sItemTag.equals("SubdualModeTog")) {
 			NWScript.executeScript("subdualmodetog", oPC);
 			return;
 		}
 
 		// Writing System - Skeet 7/12/10
-		if (sItemTag == "td_it_quillpen") {
+		if (sItemTag.equals("td_it_quillpen")) {
 			NWScript.executeScript("td_it_quillpen", oTarget);
 			return;
 		}
 
 		// Infection Checker - Skeet 7/12/10
-		if (sItemTag == "out_infchecker") {
+		if (sItemTag.equals("out_infchecker")) {
 			NWScript.executeScript("out_infchecker", oTarget);
 			return;
 		}
 
 		// Badge Book
-		if (sItemTag == "badgebook") {
+		if (sItemTag.equals("badgebook")) {
 			NWScript.executeScript("badgebook", oTarget);
 			return;
 		}
 
 		// Books can now tear out pages
 		// Edit by Drakaden, Notebooks can tear out pages too now
-		if (sItemTag == "td_it_blankbook" || sItemTag == "notebook") {
+		if (sItemTag.equals("td_it_blankbook") || sItemTag.equals("notebook")) {
 			NWScript.createItemOnObject("td_it_blankparch", oPC, 1, "");
 			return;
 		}
 
 		// Added by Drakaden, Distraction Doll.
-		if (sItemTag == "distractiondo001") {
+		if (sItemTag.equals("distractiondo001")) {
 			oItem2 = NWScript.createObject(ObjectType.CREATURE,
 					"distractiondo001", NWScript.getLocation(oPC), false, "");
 
@@ -82,7 +82,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		}
 
 		// Added by Drakaden, empties perfume bottle.
-		if (sItemTag == "perfumebottle001") {
+		if (sItemTag.equals("perfumebottle001")) {
 			NWScript.createItemOnObject("perfumebottle002", oPC, 1, "");
 			NWScript.setPlotFlag(oItem, false);
 			NWScript.destroyObject(oItem, 0.0f);
@@ -93,7 +93,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		// cigarette spawned is directly dependant on the user's sex for item
 		// fashion purpose
 		// Spawned cigs lasts 5 minutes then destroy themselves
-		if (sItemTag == "_mdrn_ot_cigar") {
+		if (sItemTag.equals("_mdrn_ot_cigar")) {
 			if (NWScript.getGender(oPC) == Gender.FEMALE) {
 				oItem2 = NWScript.createItemOnObject("_mdrn_cigt_women", oPC,
 						1, "");
@@ -107,7 +107,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		}
 
 		// Added by Drakaden, Armor reinforcing Kit.
-		if (sItemTag == "makeshiftarmo001") {
+		if (sItemTag.equals("makeshiftarmo001")) {
 
 			if (NWScript.getBaseItemType(oTarget) == BaseItem.ARMOR) {
 				iArmor1 = NWScript.getItemACValue(oTarget);
@@ -125,11 +125,11 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 					NWItemProperty[] itemProperties = NWScript
 							.getItemProperties(oTarget);
 
-					for (int current = 0; current < itemProperties.length; current++) {
+					for (NWItemProperty itemProperty : itemProperties) {
 						if (NWScript.getLocalInt(oTarget, "ACPropertyFound1") != 1
-								&& itemProperties[current].getItemPropertyId() == ItemProperty.AC_BONUS) {
+								&& itemProperty.getItemPropertyId() == ItemProperty.AC_BONUS) {
 							iArmor2 = NWScript
-									.getItemPropertyCostTableValue(itemProperties[current]);
+									.getItemPropertyCostTableValue(itemProperty);
 							NWScript.setLocalInt(oTarget, "ACPropertyFound1", 1);
 
 							break;
@@ -150,8 +150,8 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		}
 
 		// Added by Drakaden, hammer can dismantle specific things.
-		if (sItemTag == "hammer001") {
-			if (sTargetTag == "MkwChair") // Chairs made of wood. "MkwChair" is
+		if (sItemTag.equals("hammer001")) {
+			if (sTargetTag.equals("MkwChair")) // Chairs made of wood. "MkwChair" is
 											// the Chair Weapon.
 			{
 				NWScript.createItemOnObject("cr_nails", oPC, 1, "");
@@ -168,10 +168,10 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 		// Added by Drakaden, scissors can salvage cloth and leather armors for
 		// cloth/leather patches.
-		if (sItemTag == "scissors001") {
+		if (sItemTag.equals("scissors001")) {
 			// Added by Drakaden, allows to scissor cloth patches for bandages,
 			// from 1 to 3.
-			if (sTargetTag == "clothpatches001") {
+			if (sTargetTag.equals("clothpatches001")) {
 				NWScript.createItemOnObject("cr_bandages", oPC, 1, "");
 				if (NWScript.random(100) >= 51) {
 					NWScript.createItemOnObject("cr_bandages", oPC, 1, "");
@@ -199,7 +199,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 		// Added by Drakaden, Zombie Perfume effects, be warned that this will
 		// also affect Mutants, NPC humans on hostile faction.
-		if (sItemTag == "zombieperfume001") {
+		if (sItemTag.equals("zombieperfume001")) {
 
 			NWScript.setStandardFactionReputation(StandardFaction.HOSTILE, 50,
 					oPC);
@@ -232,13 +232,13 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 		// Added by Drakaden, recycle glass bottles from Bottles of wine, beer
 		// or water.
-		if (sResRef == "drink_waterbo002" || sResRef == "drink_waterbo001"
-				|| sResRef == "drink_waterbottl") {
+		if (sResRef.equals("drink_waterbo002") || sResRef.equals("drink_waterbo001")
+				|| sResRef.equals("drink_waterbottl")) {
 			NWScript.createItemOnObject("cr_miscthin001", oPC, 1, "");
 		}
 
 		// DM Item Modifier
-		if (sItemTag == "DM_Item_Manipulator") {
+		if (sItemTag.equals("DM_Item_Manipulator")) {
 			if (NWScript.getIsObjectValid(oTarget)
 					&& NWScript.getObjectType(oTarget) == ObjectType.ITEM) {
 				NWScript.setLocalObject(oPC, "TARGETED_ITEM", oTarget);
@@ -260,7 +260,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		}
 
 		// Mutational consumable item. Starts conversation - Skeet - 11/25/2014
-		if (sItemTag == "pc_mutationsyn") {
+		if (sItemTag.equals("pc_mutationsyn")) {
 			Scheduler.assign(oPC, new Runnable() {
 				public void run() {
 					NWScript.actionStartConversation(
@@ -275,12 +275,12 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 		// Crafting: Any item with cr_ tag prefix is handled as a crafting item
 		// and fired under mzs_crafting script - Skeet
-		if (sCraft == "cr_") {
+		if (sCraft.equals("cr_")) {
 			NWScript.executeScript("mzs_crafting", objSelf);
 			return;
 		}
 
-		else if (sItemTag == "DyeKit") {
+		else if (sItemTag.equals("DyeKit")) {
 			Scheduler.assign(oPC, new Runnable() {
 				public void run() {
 					NWScript.actionStartConversation(
@@ -291,14 +291,14 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 			Scheduler.flushQueues();
 		}
 
-		else if (sCure == "cure_") {
+		else if (sCure.equals("cure_")) {
 			NWScript.executeScript("mzs_curative", objSelf);
 			return;
 		}
 
 		// Player AFK Tool
-		if (sItemTag == "AFKPlayerTool") {
-			if (sTag == "OOCAFKLounge") {
+		if (sItemTag.equals("AFKPlayerTool")) {
+			if (sTag.equals("OOCAFKLounge")) {
 				NWScript.sendMessageToPC(oPC, "You're already in the lounge!");
 				return;
 			}

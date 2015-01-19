@@ -10,7 +10,9 @@ public class Test implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {
 		NWObject pc = NWScript.getLastUsedBy();
+		NWObject area = NWScript.getArea(pc);
+		String resref = NWScript.getResRef(area);
 
-
+		NWNX_Areas.LoadArea(resref);
 	}
 }
