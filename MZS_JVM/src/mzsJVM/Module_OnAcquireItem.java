@@ -2,6 +2,7 @@ package mzsJVM;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.Inventory;
 
+@SuppressWarnings("unused")
 public class Module_OnAcquireItem implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {
@@ -14,21 +15,21 @@ public class Module_OnAcquireItem implements IScriptEventHandler {
 		int iRenown = NWScript.getLocalInt(oDataBase, "shs");
 		int iRenownAward = NWScript.getLocalInt(oRenown, "shs");
 
-		if (sTag == "_mdrn_ot_talkie")
+		if (sTag.equals("_mdrn_ot_talkie"))
 		{
 			NWScript.createItemOnObject("_mdrn_ot_talk1", oPC, 1, "");
 			NWScript.destroyObject(oItem, 0.1f);
 		}
 
 		//Update Bag of seeds items to new ones
-		if (sTag == "bagofseeds001")
+		if (sTag.equals("bagofseeds001"))
 		{
 			NWScript.createItemOnObject("bagofseeds001", oPC, 1, "");
 			NWScript.destroyObject(oItem, 0.1f);
 			return;
 		}
 
-		if (sTag == "shsaward")  //Renown changed to SHS, please leave vars alone
+		if (sTag.equals("shsaward"))  //Renown changed to SHS, please leave vars alone
 		{
 			NWScript.setLocalInt(oDataBase, "shs", iRenown + iRenownAward);
 			int iRenownTotal = iRenown + iRenownAward;
@@ -37,13 +38,13 @@ public class Module_OnAcquireItem implements IScriptEventHandler {
 			NWScript.destroyObject(oItem, 0.1f);
 		}
 
-		if (sTag == "grasstuft")  //Useless grass tuft,for use only in "seed" lootables
+		if (sTag.equals("grasstuft"))  //Useless grass tuft,for use only in "seed" lootables
 		{
 			NWScript.sendMessageToPC(oPC, "You toss aside a tuft of grass while looking for seeds.");
 			NWScript.destroyObject(oItem, 0.1f);
 		}
 
-		if (sTag == "mut_stats")//Mutational hook, equip stats once received - Skeet, 11/25/2014
+		if (sTag.equals("mut_stats"))//Mutational hook, equip stats once received - Skeet, 11/25/2014
 			NWScript.actionEquipItem(oItem, Inventory.SLOT_RIGHTRING);
 
 		// Bioware default

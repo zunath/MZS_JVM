@@ -11,7 +11,7 @@ public class NWNX_APS {
     {
         NWObject module = NWObject.MODULE;
 
-        String memory = new String();
+        String memory = "";
 
         for(int i = 0; i < 8; i++)
         {
@@ -22,7 +22,7 @@ public class NWNX_APS {
         NWScript.setLocalString(module, "NWNX!ODBC!SPACER", memory);
     }
 
-
+    @SuppressWarnings("unused")
     public static NWVector StringToVector(String sVector)
     {
         float fX= 0.0f;
@@ -49,12 +49,13 @@ public class NWNX_APS {
         return new NWVector(fX, fY, fZ);
     }
 
+    @SuppressWarnings("unused")
     public static String LocationToString(NWLocation lLocation)
     {
         NWObject oArea = NWScript.getAreaFromLocation(lLocation);
         NWVector vPosition = NWScript.getPositionFromLocation(lLocation);
         float fOrientation = NWScript.getFacingFromLocation(lLocation);
-        String sReturnValue = new String();
+        String sReturnValue = "";
 
         if (NWScript.getIsObjectValid(oArea))
             sReturnValue = "#AREA#" + NWScript.getTag(oArea) +
@@ -67,6 +68,7 @@ public class NWNX_APS {
         return sReturnValue;
     }
 
+    @SuppressWarnings("unused")
     public static NWLocation StringToLocation(String sLocation)
     {
         NWObject oArea;
@@ -105,6 +107,7 @@ public class NWNX_APS {
 
         return new NWLocation(null, 0.0f, 0.0f, 0.0f, 0.0f);
     }
+
 
 
 }
