@@ -42,6 +42,7 @@ public class Module_OnPlayerChat implements IScriptEventHandler {
 					NWScript.setLocalString(oPC, "TD_QUILLCHAT", tempSpoken);
 				}
 			});
+			Scheduler.flushQueues();
 		}
 
 
@@ -90,7 +91,6 @@ public class Module_OnPlayerChat implements IScriptEventHandler {
 			iFireRate1 = NWScript.getLocalInt(oWeapon, "FireRate1");
 			if (iFireRate1 >= -99)
 			{
-				iFireRate1 = NWScript.getLocalInt(oWeapon, "FireRate1");
 				NWScript.setLocalInt(oWeapon, "FireRateMode1", 1);
 				RefreshFireRate(objSelf);
 				NWScript.sendMessageToPC(oPC, "Weapon is set to single shot mode.");
@@ -187,7 +187,7 @@ public class Module_OnPlayerChat implements IScriptEventHandler {
 			//Modified by Drakaden, allows DMs and possessed NPCS to radio without a physical radio item.
 			if (!NWScript.getIsObjectValid(oRadio) && !NWScript.getIsDM(oPC) && !NWScript.getIsDMPossessed(oPC) || (NWScript.getLocalInt(oPC, "radio")) == 0 && !NWScript.getIsDM(oPC) && !NWScript.getIsDMPossessed(oPC))
 			{
-				NWScript.setPCChatMessage(sSpoken = "");
+				NWScript.setPCChatMessage("");
 				return;
 			}
 			final String sIdentity = NWScript.getStringLeft(sSpoken, 3);
@@ -204,7 +204,7 @@ public class Module_OnPlayerChat implements IScriptEventHandler {
 
 			int iLength = NWScript.getStringLength(sSpoken);
 			final String sSub = NWScript.getSubString(sSpoken, 3, iLength);
-			NWScript.setPCChatMessage(sSpoken = "");
+			NWScript.setPCChatMessage("");
 
 			NWObject[] pcs = NWScript.getPCs();
 
@@ -245,6 +245,7 @@ public class Module_OnPlayerChat implements IScriptEventHandler {
 								NWScript.playSound("sonarbeep");
 							}
 						});
+						Scheduler.flushQueues();
 					}
 
 					else
@@ -258,7 +259,6 @@ public class Module_OnPlayerChat implements IScriptEventHandler {
 			NWScript.sendMessageToAllDMs("*Radio, " + NWScript.floatToString(NWScript.getLocalFloat(oDataBase, "RadioChannel1"), 3, 1) + "*, " + sName + " - " + "'" + sSub + "'");
 
 		}
-		sSpoken = "";
 	}
 
 

@@ -122,5 +122,6 @@ public class Module_OnPlayerEquipItem implements IScriptEventHandler {
 		// Bioware Default
 		NWScript.executeScript("x2_mod_def_equ", objSelf);
 
+		Scheduler.flushQueues();
 	}
 }

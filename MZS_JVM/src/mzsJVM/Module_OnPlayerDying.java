@@ -2,6 +2,7 @@ package mzsJVM;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.*;
 
+@SuppressWarnings("unused")
 public class Module_OnPlayerDying implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {
@@ -25,7 +26,7 @@ public class Module_OnPlayerDying implements IScriptEventHandler {
 				Bleed(objSelf, 1);
 			}
 		});
-
+		Scheduler.flushQueues();
 	}
 
 

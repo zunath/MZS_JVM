@@ -19,7 +19,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         NWObject oTarget = NWScript.getWaypointByTag("WP_death");
         final NWLocation lTarget = NWScript.getLocation(oTarget);
 
-        if(NWScript.getIsPC(oPC) && !NWScript.getIsDM(oPC))      // character with zero xp
+        if(NWScript.getIsPC(oPC) && NWScript.getXP(oPC) == 0 && !NWScript.getIsDM(oPC))      // character with zero xp
         {
             if (NWScript.getXP(oPC) == 0)
             {
@@ -68,6 +68,8 @@ public class Module_OnClientEnter implements IScriptEventHandler {
                     NWScript.destroyObject(item, 0.0f);
                 }
             }
+
+            NWScript.sendMessageToPC(oPC, "Before firing simtools"); // debug
 
             // SimTools Chat System
             NWScript.executeScript("fky_chat_clenter", objSelf);
@@ -298,6 +300,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         }
 
         // Set jump allowances
+        //noinspection ConstantConditions,PointlessBooleanExpression
         if (!Constants.AllowJumpingByDefault)
             NWScript.setLocalInt(oPC, "JUMP_INVALID", 1);
 
