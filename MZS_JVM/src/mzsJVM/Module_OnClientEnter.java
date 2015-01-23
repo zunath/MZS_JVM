@@ -13,7 +13,6 @@ public class Module_OnClientEnter implements IScriptEventHandler {
     @Override
     public void runScript(final NWObject objSelf) {
         NWObject oPC = NWScript.getEnteringObject();
-        NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
 
         // Prevent other script events from firing while logging in.
         NWScript.setLocalInt(oPC, "PC_ENTERING_MOD", 1);
@@ -37,6 +36,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         AddJournalEntries(oPC);
         GiveSystemItems(oPC);
         ValidateCharacter(oPC);
+        LoadHitPoints(oPC);
 
         NWScript.floatingTextStringOnCreature("Welcome to Modern Zombie Survival 3!", oPC, false);
         NWScript.floatingTextStringOnCreature("Please read your journal and survival guide for module information!", oPC, false);
@@ -44,9 +44,6 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         Scheduler.flushQueues();
 
         FireScripts(objSelf);
-
-
-        NWScript.sendMessageToPC(oPC, "Hunger = " + NWScript.getLocalInt(oDatabase, "CURRENT_HUNGER") + ", Thirst = " + NWScript.getLocalInt(oDatabase, "CURRENT_THIRST"));
     }
 
     private void InitializeNewCharacter(final NWObject oPC)
@@ -241,16 +238,45 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         NWScript.addJournalQuestEntry("write_1", 1, oPC, false, false, false);
     }
 
+    private void LoadHitPoints(NWObject oPC)
+    {
+        NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
+        int iFirstRun = NWScript.getLocalInt(oDatabase, "PHP_FIRSTRUN");
+        int iHP = NWScript.getCurrentHitPoints(oPC);
+
+        // Prevents new characters from being damaged
+        if(iFirstRun < 2)
+        {
+            NWScript.setLocalInt(oDatabase, "PHP_FIRSTRUN", 2);
+            return;
+        }
+
+        int iStoredHP = NWScript.getLocalInt(oDatabase, "PHP_STORED_HP");
+        int iDamage;
+
+        // If the stored HP is in the negatives, we need to bring the PC down to 0 HP, and then apply the HP
+        if(iStoredHP < 0)
+        {
+            iDamage = iHP + Math.abs(iStoredHP);
+        }
+        // Otherwise the stored HP is in the positives, so we simply need to take current HP and subtract it by the stored HP
+        else
+        {
+            iDamage = iHP - iStoredHP;
+        }
+
+        // Deal damage only if the HP of oPC needs to be lowered.
+        if(iDamage != 0) {
+            NWScript.applyEffectToObject(Duration.TYPE_INSTANT, NWScript.effectDamage(iDamage, DamageType.MAGICAL, DamagePower.NORMAL), oPC, 0.0f);
+        }
+    }
+
     private void FireScripts(final NWObject objSelf)
     {
         NWScript.executeScript("fky_chat_clenter", objSelf); // SIMTools
         NWScript.executeScript("auth_mod_enter", objSelf);   // PC Authorization System
         NWScript.executeScript("dm_authorization", objSelf); // DM Authorization System
-        NWScript.executeScript("php_mod_enter", objSelf);    // Persistent Hit Points
         NWScript.executeScript("cnr_module_oce", objSelf);   // CNR Refinery System
-
-
-
     }
 
 }
