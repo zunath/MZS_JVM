@@ -9,7 +9,7 @@ public class Player_OnHeartbeat implements IScriptEventHandler {
     @Override
     public void runScript(NWObject objSelf) {
 
-        if (NWScript.getIsDM(objSelf)) {return;}
+        if (!NWScript.getIsPC(objSelf) || NWScript.getIsDM(objSelf)) {return;}
 
         NWObject oArea = NWScript.getArea(objSelf);
 
@@ -18,7 +18,7 @@ public class Player_OnHeartbeat implements IScriptEventHandler {
             return;
         }
 
-        NWObject oDatabase = NWScript.getItemPossessedBy(objSelf, "database");
+        NWObject oDatabase = NWScript.getItemPossessedBy(objSelf, Constants.PCDatabaseTag);
         int iHP = NWScript.getCurrentHitPoints(objSelf);
         int iMaxHP = NWScript.getMaxHitPoints(objSelf);
         int iHungerCountDown = NWScript.getLocalInt(oDatabase, "HUNGER_COUNT_DOWN");
@@ -99,8 +99,8 @@ public class Player_OnHeartbeat implements IScriptEventHandler {
             NWScript.setLocalInt(oDatabase, "SPELL_SKILL_COUNT_DOWN", iCurrentHunger);
         }
 
-
         // Idle count down checks
         NWScript.executeScript("idle_on_pctick", objSelf);
     }
+
 }

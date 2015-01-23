@@ -1,8 +1,11 @@
 package mzsJVM;
 
+import mzsJVM.Data.ItemDTO;
+import mzsJVM.GameObjects.CreatureGO;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -11,286 +14,108 @@ public class Module_OnClientEnter implements IScriptEventHandler {
     public void runScript(final NWObject objSelf) {
         NWObject oPC = NWScript.getEnteringObject();
         NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
-        int iTimesLoggedIn = NWScript.getLocalInt(oDatabase, "times_logged_in");
-        NWObject oDead = NWScript.getItemPossessedBy(oPC, "death_token");
-        NWObject oSurvive = NWScript.getItemPossessedBy(oPC, "survivor_guide");
-        NWObject oAfkTool = NWScript.getItemPossessedBy(oPC, "AFKPlayerTool");
+
+        // Prevent other script events from firing while logging in.
         NWScript.setLocalInt(oPC, "PC_ENTERING_MOD", 1);
-        NWObject oTarget = NWScript.getWaypointByTag("WP_death");
-        final NWLocation lTarget = NWScript.getLocation(oTarget);
-
-        if(NWScript.getIsPC(oPC) && NWScript.getXP(oPC) == 0 && !NWScript.getIsDM(oPC))      // character with zero xp
-        {
-            if (NWScript.getXP(oPC) == 0)
-            {
-                // First, wipe their inventory
-                //Added by Drakaden, to attempt to avoid new characters to enter with hacked equipped items
-                NWObject oInventory = NWScript.getItemInSlot(Inventory.SLOT_ARMS, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_ARROWS, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_BELT, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_BOLTS, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_BOOTS, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_BULLETS, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_CARMOUR, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_CHEST, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_CLOAK, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_CWEAPON_B, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_CWEAPON_L, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_CWEAPON_R, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_HEAD, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_LEFTHAND, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_LEFTRING, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_NECK, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_RIGHTHAND, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-                oInventory = NWScript.getItemInSlot(Inventory.SLOT_RIGHTRING, oPC);
-                NWScript.destroyObject(oInventory, 0.0f);
-
-
-                for(NWObject item : NWScript.getItemsInInventory(oPC))
-                {
-                    NWScript.destroyObject(item, 0.0f);
-                }
-            }
-
-            NWScript.sendMessageToPC(oPC, "Before firing simtools"); // debug
-
-            // SimTools Chat System
-            NWScript.executeScript("fky_chat_clenter", objSelf);
-
-            // PC Authorization System
-            NWScript.executeScript("auth_mod_enter", objSelf);
-
-            // Utilized by d20_on_equip. If this variable is not detected
-            // by that script, it does not destroy/reload ammo mags.
-            // This is to prevent ammo-eating OnEnter.
-            NWScript.setLocalInt(oPC, "RKP_PC_ENTERED", 1);
-
-            //Radio is also on by default upon login
-            NWScript.setLocalInt(oPC, "radio", 1);
-
-            // EFFECT CUTSCENE GHOSTWALK TO PC'S - Skeet 7/4/10
-            NWEffect eGhost = NWScript.effectCutsceneGhost();
-            NWScript.applyEffectToObject(Duration.TYPE_PERMANENT, eGhost, oPC, 0.0f);
-
-            //PlayerID + CDKEY + IP address Logging, reports to DM channel also,
-            // This is used mainly for investigative and banning purposes.
-            String sIP = NWScript.getPCIPAddress(oPC);
-            String sPlayerName = NWScript.getPCPlayerName(oPC);
-            String sCDKey = NWScript.getPCPublicCDKey(oPC, false);
-            String sPostCD = NWScript.getPCPublicCDKey(oPC, false);
-            NWScript.sendMessageToAllDMs("<Entering - Player GSID: " + sPlayerName + ", CD-Key: " + sPostCD + ", IP: " + sIP + ">");
-            NWScript.printString(sPlayerName + sCDKey + sIP); // Added by Skeet, print physical log of entering players
-
-            // DM ACCESS ONLY BY VERIFIED CDKEY
-            NWScript.executeScript("dm_authorization", objSelf);
-
-            //IF a hostile PC mutation, set appropriate faction reps
-            if (NWScript.getLocalInt(oDatabase, "mutation") == 2)
-            {
-                Scheduler.assign(oPC, new Runnable() {
-                    public void run() {
-                        NWScript.clearAllActions(false);
-                    }
-                });
-                NWScript.setStandardFactionReputation(StandardFaction.COMMONER, 0, oPC);
-                NWScript.setStandardFactionReputation(StandardFaction.DEFENDER, 0, oPC);
-                NWScript.setStandardFactionReputation(StandardFaction.HOSTILE, 100, oPC);
-            }
-
-
-            //If the PC has a death token, take them to the death area
-            if(NWScript.getIsPC(oPC) && (NWScript.getIsObjectValid(oDead)))
-            {
-                Scheduler.assign(oPC, new Runnable() {
-                    public void run() {
-                        NWScript.clearAllActions(false);
-                        NWScript.actionJumpToLocation(lTarget);
-                    }
-                });
-            }
-
-            NWScript.executeScript("php_mod_enter", objSelf);
-
-            // Starting cash
-            NWScript.takeGoldFromCreature(NWScript.getGold(oPC), oPC, true);
-            NWScript.giveGoldToCreature(oPC, 10);
-
-            /// Provide starting widgets.
-            // Deletes the mysterious second database.
-            NWObject oItem = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
-            if (NWScript.getIsObjectValid(oItem))
-            {
-                NWScript.setPlotFlag(oItem, false);
-                NWScript.destroyObject(oItem, 0.0f);
-            }
-
-            oDatabase = NWScript.createItemOnObject(Constants.PCDatabaseTag, oPC, 1, "");
-            // Set up their HP regen
-            NWScript.setLocalInt(oDatabase, "HP_REGEN", 1);
-            // Set up their max Hunger level
-            NWScript.setLocalInt(oDatabase, "CURRENT_HUNGER", 100);
-            NWScript.setLocalInt(oDatabase, "HUNGER_COUNT_DOWN", 30);
-            // Set up their max thirst level
-            NWScript.setLocalInt(oDatabase, "CURRENT_THIRST", 100);
-            NWScript.setLocalInt(oDatabase, "THIRST_COUNT_DOWN", 20);
-            // It's a new character, so don't make the skill system updates fire
-            NWScript.setLocalInt(oDatabase, "SKILLS_UPDATED", 1);
-            // Set their disease count down timer to max
-            NWScript.setLocalInt(oDatabase, "DISEASE_COUNT_DOWN", 600);
-            NWScript.setXP(oPC, 3001);    //LMA was 1001, but since level 3 is minimim now...
-            NWScript.giveGoldToCreature(oPC, 100);
-            NWScript.createItemOnObject("water_canteen", oPC, 1, "");
-            // Starting Bread
-            NWScript.createItemOnObject("food_bread", oPC, 2, "");
-
-            NWScript.createItemOnObject("dmfi_pc_dicebag", oPC, 1, "");
-            NWScript.createItemOnObject("dmfi_pc_follow", oPC, 1, "");
-            NWScript.createItemOnObject("pcemotewidget", oPC, 1, "");
-            NWScript.createItemOnObject("mzs2_itemdestroy", oPC, 1, "");
-
-            NWScript.createItemOnObject("out_infection", oPC, 1, "");
-        }
-
-        // NOT NEW CHARS
-        //LMA Added xp to old characters to keep up with new players
-        int iXP = NWScript.getXP(oPC);
-        if (iXP < 3000)
-            NWScript.setXP(oPC, iXP + 2000);
-
-        NWScript.executeScript("update_journal", objSelf);
-        // Structure system - Disabled by Zunath 6/21/2011
-        //ExecuteScript("struc_mod_enter", OBJECT_SELF);
-
-
-        Scheduler.delay(oPC, 1, new Runnable() {
+        Scheduler.delay(oPC, 1000, new Runnable() {
             public void run() {
 
                 NWScript.deleteLocalInt(objSelf, "PC_ENTERING_MOD");
             }
         });
 
-        // Zunath 2015-01-18: The old PC ID numbers were not being used, so I'm assigning
-        // users with a UUID instead so we don't need to make a DB call.
-        if(NWScript.getLocalString(oPC, Constants.PCIDNumberVariable).equals(""))
+        if (NWScript.getXP(oPC) == 0 && !NWScript.getIsDM(oPC))
         {
-            NWScript.setLocalString(oPC, Constants.PCIDNumberVariable, UUID.randomUUID().toString());
+            InitializeNewCharacter(oPC);
         }
 
-        // Add individual starting items here
-        if(NWScript.getIsPC(oPC) && (!NWScript.getIsObjectValid(oSurvive)))
-            NWScript.createItemOnObject("survivor_guide", oPC, 1, "");
+        SendPlayerJoinedMessage(oPC);
+        ApplyPCEffects(oPC);
+        ApplyMutationEffects(oPC);
+        ApplyDeathEffects(oPC);
+        ApplyPCVariables(oPC);
+        AddJournalEntries(oPC);
+        GiveSystemItems(oPC);
+        ValidateCharacter(oPC);
 
-        if(NWScript.getIsPC(oPC) && (NWScript.getIsObjectValid(oAfkTool)))
+        NWScript.floatingTextStringOnCreature("Welcome to Modern Zombie Survival 3!", oPC, false);
+        NWScript.floatingTextStringOnCreature("Please read your journal and survival guide for module information!", oPC, false);
+
+        Scheduler.flushQueues();
+
+        FireScripts(objSelf);
+
+
+        NWScript.sendMessageToPC(oPC, "Hunger = " + NWScript.getLocalInt(oDatabase, "CURRENT_HUNGER") + ", Thirst = " + NWScript.getLocalInt(oDatabase, "CURRENT_THIRST"));
+    }
+
+    private void InitializeNewCharacter(final NWObject oPC)
+    {
+        CreatureGO pcGO = new CreatureGO(oPC);
+        pcGO.destroyAllEquippedItems();
+        pcGO.destroyAllInventoryItems();
+
+        Scheduler.assign(oPC, new Runnable() {
+            @Override
+            public void run() {
+                NWScript.takeGoldFromCreature(NWScript.getGold(oPC), oPC, true);
+                NWScript.giveGoldToCreature(oPC, 10);
+            }
+        });
+
+        NWObject oDatabase = NWScript.createItemOnObject(Constants.PCDatabaseTag, oPC, 1, "");
+        NWScript.setLocalInt(oDatabase, "HP_REGEN", 1);
+        NWScript.setLocalInt(oDatabase, "CURRENT_HUNGER", 100);
+        NWScript.setLocalInt(oDatabase, "HUNGER_COUNT_DOWN", 30);
+        NWScript.setLocalInt(oDatabase, "CURRENT_THIRST", 100);
+        NWScript.setLocalInt(oDatabase, "THIRST_COUNT_DOWN", 20);
+        NWScript.setLocalInt(oDatabase, "SKILLS_UPDATED", 1);
+        NWScript.setLocalInt(oDatabase, "DISEASE_COUNT_DOWN", 600);
+        NWScript.setXP(oPC, 3001); // Set to level 3
+        NWScript.createItemOnObject("food_bread", oPC, 2, "");
+    }
+
+    private void SendPlayerJoinedMessage(NWObject oPC)
+    {
+        String sIP = NWScript.getPCIPAddress(oPC);
+        String sPlayerName = NWScript.getPCPlayerName(oPC);
+        String sCDKey = NWScript.getPCPublicCDKey(oPC, false);
+        String sPostCD = NWScript.getPCPublicCDKey(oPC, false);
+        NWScript.sendMessageToAllDMs("<Entering - Player GSID: " + sPlayerName + ", CD-Key: " + sPostCD + ", IP: " + sIP + ">");
+        NWScript.printString(sPlayerName + sCDKey + sIP);
+    }
+
+    private void ApplyPCEffects(NWObject oPC)
+    {
+        NWEffect eGhost = NWScript.effectCutsceneGhost();
+        NWScript.applyEffectToObject(Duration.TYPE_PERMANENT, eGhost, oPC, 0.0f);
+    }
+
+    private void ApplyMutationEffects(NWObject oPC)
+    {
+        NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
+
+        if (NWScript.getLocalInt(oDatabase, "mutation") == 2)
         {
-            NWScript.createItemOnObject("afkplayertool", oPC, 1, "");
+            Scheduler.assign(oPC, new Runnable() {
+                public void run() {
+                    NWScript.clearAllActions(false);
+                }
+            });
+            NWScript.setStandardFactionReputation(StandardFaction.COMMONER, 0, oPC);
+            NWScript.setStandardFactionReputation(StandardFaction.DEFENDER, 0, oPC);
+            NWScript.setStandardFactionReputation(StandardFaction.HOSTILE, 100, oPC);
         }
+    }
 
-        // Gives the character a PC Reload Widget if they don't have one.
-        if (!NWScript.getIsObjectValid(NWScript.getItemPossessedBy(oPC, "_mdrn_it_reload_pc")))
-            NWScript.createItemOnObject("_mdrn_it_reload", oPC, 1, "");
+    private void ApplyDeathEffects(NWObject oPC)
+    {
+        NWObject oDeathToken = NWScript.getItemPossessedBy(oPC, "death_token");
+        final String deathWaypoint = "WP_death";
+        final NWLocation lTarget = NWScript.getLocation(NWScript.getWaypointByTag(deathWaypoint));
 
-        NWObject oDye = NWScript.getItemPossessedBy(oPC, "DyeKit");
-        if(NWScript.getIsPC(oPC) && (!NWScript.getIsObjectValid(oDye)))
-            oDye = NWScript.createItemOnObject("mil_dyekit001", oPC, 1, "");
-        NWScript.setDroppableFlag(oDye, false);
-        NWScript.setItemCursedFlag(oDye, true);
-
-        //Writing System
-        NWObject oPen = NWScript.getItemPossessedBy(oPC, "td_it_quillpen");
-        if(NWScript.getIsPC(oPC) && !NWScript.getIsObjectValid(oPen))
+        if(NWScript.getIsPC(oPC) && (NWScript.getIsObjectValid(oDeathToken)))
         {
-            oPen = NWScript.createItemOnObject("td_it_quillpen", oPC, 1, "");
-            NWScript.setLocalInt(oPen, "ModuleUpdatedVersion", 5);
-        }
-        else
-        if(NWScript.getIsPC(oPC) && NWScript.getIsObjectValid(oPen) && NWScript.getLocalInt(oPen, "ModuleUpdatedVersion") != 5)
-        {
-            NWScript.destroyObject(oPen, 0.0f);
-            oPen = NWScript.createItemOnObject("td_it_quillpen", oPC, 1, "");
-            NWScript.setLocalInt(oPen, "ModuleUpdatedVersion", 5);
-        }
-
-        //Infection Checker Item
-        NWObject oInfChecker = NWScript.getItemPossessedBy(oPC, "out_infchecker");
-        if(NWScript.getIsPC(oPC) && (!NWScript.getIsObjectValid(oInfChecker)))
-            NWScript.createItemOnObject("out_infchecker", oPC, 1, "");
-
-        //Updated Radio Items
-        NWObject oRadioItem = NWScript.getItemPossessedBy(oPC, "_mdrn_ot_talkie");
-        if (NWScript.getIsPC(oPC) && (NWScript.getIsObjectValid(oRadioItem)))
-        {
-            NWScript.destroyObject(oRadioItem, 0.1f);
-            NWScript.createItemOnObject("_mdrn_ot_talk1", oPC, 1, "");
-        }
-
-        //Added by Drakaden, updates the old radio with the new one 14/06/11 Update Version: 2.
-        oRadioItem = NWScript.getItemPossessedBy(oPC, "_mdrn_ot_talk1");
-        if(NWScript.getIsPC(oPC) && NWScript.getIsObjectValid(oRadioItem) && NWScript.getLocalInt(oRadioItem, "ModuleUpdatedVersion") < 2)
-        {
-            NWScript.destroyObject(oRadioItem, 0.0f);
-            oRadioItem = NWScript.createItemOnObject("_mdrn_ot_talk1", oPC, 1, "");
-            NWScript.setLocalInt(oRadioItem, "ModuleUpdatedVersion", 2);
-        }
-
-        // Give a "Break Down Item" to players that don't have it already.
-        NWObject oBreakDownItem = NWScript.getItemPossessedBy(oPC, "mzs2_itemdestroy");
-        if (!NWScript.getIsObjectValid(oBreakDownItem))
-        {
-            NWScript.createItemOnObject("mzs2_itemdestroy", oPC, 1, "");
-        }
-
-        //Badge Book
-        NWObject oBadgeBook = NWScript.getItemPossessedBy(oPC, "badgebook");
-        String sPCName = NWScript.getName(oPC, false);
-        if(NWScript.getIsPC(oPC) && (!NWScript.getIsObjectValid(oBadgeBook)))
-        {
-            NWScript.createItemOnObject("badgebook", oPC, 1, "");
-            NWScript.setName(NWScript.getItemPossessedBy(oPC, "badgebook"), sPCName + "'s " + "Journal of Badges and Achievements");
-            NWScript.setDroppableFlag(NWScript.getItemPossessedBy(oPC, "badgebook"), false);
-            NWScript.setItemCursedFlag(NWScript.getItemPossessedBy(oPC, "badgebook"), true);
-        }
-        else
-        {
-            NWScript.setName(NWScript.getItemPossessedBy(oPC, "badgebook"), sPCName + "'s " + "Journal of Badges and Achievements");
-            NWScript.setDroppableFlag(NWScript.getItemPossessedBy(oPC, "badgebook"), false);
-            NWScript.setItemCursedFlag(NWScript.getItemPossessedBy(oPC, "badgebook"), true);
-        }
-
-        //CNR Refinery Tradeskill System, OnEnter
-        NWScript.executeScript("cnr_module_oce", objSelf);
-
-        //SUBDUAL HANDLER - Skeet 7/4/10
-        NWScript.executeScript("subdual_clenter", NWScript.getEnteringObject());
-
-        iTimesLoggedIn = iTimesLoggedIn + 1;
-        NWScript.setLocalInt(oDatabase, "times_logged_in", iTimesLoggedIn);
-
-        // Check if it's a invalid character.
-        if (NWScript.getLevelByClass(ClassType.SORCERER, oPC) > 0 || NWScript.getLevelByClass(ClassType.WIZARD, oPC) > 0
-                || NWScript.getLevelByClass(ClassType.CLERIC, oPC) > 0 || NWScript.getLevelByClass(ClassType.PALADIN, oPC) > 0
-                || NWScript.getLevelByClass(ClassType.BARD, oPC) > 0 || NWScript.getLevelByClass(ClassType.DRUID, oPC) > 0
-                || NWScript.getRacialType(oPC)!= RacialType.HUMAN)
-        {
-            NWScript.sendMessageToPC(oPC, "Invalid Character: No wizards, sorcerers, clerics, paladins, bards, or druids. Humans only. Please leave and try again.");
-
-
             Scheduler.assign(oPC, new Runnable() {
                 public void run() {
                     NWScript.clearAllActions(false);
@@ -298,15 +123,134 @@ public class Module_OnClientEnter implements IScriptEventHandler {
                 }
             });
         }
+    }
+
+    private void ApplyPCVariables(NWObject oPC)
+    {
+        NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
+
+        // Uniquely generated ID
+        if(NWScript.getLocalString(oDatabase, Constants.PCIDNumberVariable).equals(""))
+        {
+            NWScript.setLocalString(oDatabase, Constants.PCIDNumberVariable, UUID.randomUUID().toString());
+        }
+
+        // Utilized by d20_on_equip. If this variable is not detected
+        // by that script, it does not destroy/reload ammo mags.
+        // This is to prevent ammo-eating OnEnter.
+        NWScript.setLocalInt(oPC, "RKP_PC_ENTERED", 1);
+
+        NWScript.setLocalInt(oPC, "radio", 1);
 
         // Set jump allowances
         //noinspection ConstantConditions,PointlessBooleanExpression
-        if (!Constants.AllowJumpingByDefault)
+        if (!Constants.AllowJumpingByDefault) {
             NWScript.setLocalInt(oPC, "JUMP_INVALID", 1);
+        }
 
-        NWScript.floatingTextStringOnCreature("Welcome to Modern Zombie Survival 3!", oPC, false);
-        NWScript.floatingTextStringOnCreature("Please, read your journal and survival guide for module information!", oPC, false);
-
-        Scheduler.flushQueues();
+        NWScript.setLocalInt(oDatabase, "times_logged_in", NWScript.getLocalInt(oDatabase, "times_logged_in") + 1);
     }
+
+    private void ValidateCharacter(NWObject oPC)
+    {
+        Integer[] validClasses = { ClassType.FIGHTER, ClassType.ROGUE, ClassType.RANGER, ClassType.MONK, ClassType.BARBARIAN, ClassType.INVALID };
+        Integer[] validRaces = { RacialType.HUMAN };
+
+        Integer race = NWScript.getRacialType(oPC);
+        Integer classType1 = NWScript.getClassByPosition(1, oPC);
+        Integer classType2 = NWScript.getClassByPosition(2, oPC);
+        Integer classType3 = NWScript.getClassByPosition(3, oPC);
+
+        if(!Arrays.asList(validRaces).contains(race) ||
+                !Arrays.asList(validClasses).contains(classType1) ||
+                !Arrays.asList(validClasses).contains(classType2) ||
+                !Arrays.asList(validClasses).contains(classType3))
+        {
+            NWScript.sendMessageToPC(oPC, "Invalid Character: No wizards, sorcerers, clerics, paladins, bards, or druids. Humans only. Please leave and try again.");
+
+            final String waypointTag = "";
+            final NWLocation lTarget = NWScript.getLocation(NWScript.getWaypointByTag(waypointTag));
+
+            Scheduler.assign(oPC, new Runnable() {
+                @Override
+                public void run() {
+                    NWScript.clearAllActions(false);
+                    NWScript.actionJumpToLocation(lTarget);
+                }
+            });
+        }
+
+    }
+
+
+    // Creates system items on the player if they don't already exist or if the PC's version is older than the current one.
+    private void GiveSystemItems(NWObject oPC)
+    {
+        if(!NWScript.getIsPC(oPC)) return;
+        String pcName = NWScript.getName(oPC, false);
+
+        ArrayList<ItemDTO> items = new ArrayList<ItemDTO>();
+        items.add(new ItemDTO("dmfi_pc_dicebag", "dmfi_pc_dicebag", 1, ""));
+        items.add(new ItemDTO("dmfi_pc_follow", "dmfi_pc_follow", 1, ""));
+        items.add(new ItemDTO("pcemotewidget", "dmfi_pc_emote", 1, ""));
+        items.add(new ItemDTO("mzs2_itemdestroy", "mzs2_itemdestroy", 1, ""));
+        items.add(new ItemDTO("out_infection", "out_infection", 1, ""));
+        items.add(new ItemDTO("out_infchecker", "out_infchecker", 1, ""));
+        items.add(new ItemDTO("td_it_quillpen", "td_it_quillpen", 5, ""));
+        items.add(new ItemDTO("badgebook", "badgebook", 1, "%s's Journal of Badges and Achievements"));
+        items.add(new ItemDTO("mil_dyekit001", "DyeKit", 1, ""));
+        items.add(new ItemDTO("_mdrn_it_reload", "_mdrn_it_reload_pc", 1, ""));
+        items.add(new ItemDTO("afkplayertool", "AFKPlayerTool", 1, ""));
+        items.add(new ItemDTO("survivor_guide", "survivor_guide", 1, ""));
+        items.add(new ItemDTO("water_canteen", "water_canteen", 1, ""));
+
+        for(ItemDTO item : items)
+        {
+            NWObject oItem = NWScript.getItemPossessedBy(oPC, item.GetResref());
+
+            if(!NWScript.getIsObjectValid(oItem))
+            {
+                oItem = NWScript.getItemPossessedBy(oPC, item.GetTag());
+            }
+
+            int version = NWScript.getLocalInt(oItem, "MZS2_ITEM_VERSION");
+
+            if(!NWScript.getIsObjectValid(oItem) || version < item.GetVersion())
+            {
+                NWScript.destroyObject(oItem, 0.0f);
+                oItem = NWScript.createItemOnObject(item.GetResref(), oPC, 1, "");
+
+                NWScript.setDroppableFlag(oItem, false);
+                NWScript.setItemCursedFlag(oItem, true);
+
+                NWScript.setLocalInt(oItem, "MZS2_ITEM_VERSION", item.GetVersion());
+
+                // Rename the item only if a format has been specified.
+                if(!item.GetNameFormat().equals(""))
+                {
+                    NWScript.setName(oItem, String.format(item.GetNameFormat(), pcName));
+                }
+            }
+        }
+    }
+    private void AddJournalEntries(NWObject oPC)
+    {
+        NWScript.addJournalQuestEntry("info_1", 1, oPC, false, false, false);
+        NWScript.addJournalQuestEntry("info_2", 1, oPC, false, false, false);
+        NWScript.addJournalQuestEntry("rules_1", 1, oPC, false, false, false);
+        NWScript.addJournalQuestEntry("write_1", 1, oPC, false, false, false);
+    }
+
+    private void FireScripts(final NWObject objSelf)
+    {
+        NWScript.executeScript("fky_chat_clenter", objSelf); // SIMTools
+        NWScript.executeScript("auth_mod_enter", objSelf);   // PC Authorization System
+        NWScript.executeScript("dm_authorization", objSelf); // DM Authorization System
+        NWScript.executeScript("php_mod_enter", objSelf);    // Persistent Hit Points
+        NWScript.executeScript("cnr_module_oce", objSelf);   // CNR Refinery System
+
+
+
+    }
+
 }
