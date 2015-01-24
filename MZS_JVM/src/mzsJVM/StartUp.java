@@ -1,6 +1,8 @@
 package mzsJVM;
+import mzsJVM.Data.DataAccess;
 import org.nwnx.nwnx2.jvm.*;
 
+@SuppressWarnings("UnusedDeclaration")
 public class StartUp {
 
 	private static EventReceiver e = new EventReceiver();
@@ -23,6 +25,7 @@ public class StartUp {
 	@SuppressWarnings("unused")
 	private static void init() {
 		Scheduler.addSchedulerListener(e);
+		DataAccess.Initialize();
 
 		/* Add some default handlers that don't do any
 		 * custom wrapping at all.
@@ -52,5 +55,6 @@ public class StartUp {
 	 */
 	@SuppressWarnings("unused")
 	private static void shutdown() {
+		DataAccess.Shutdown();
 	}
 }

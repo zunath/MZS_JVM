@@ -36,7 +36,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         AddJournalEntries(oPC);
         GiveSystemItems(oPC);
         ValidateCharacter(oPC);
-        LoadHitPoints(oPC);
+        //LoadHitPoints(oPC);
 
         NWScript.floatingTextStringOnCreature("Welcome to Modern Zombie Survival 3!", oPC, false);
         NWScript.floatingTextStringOnCreature("Please read your journal and survival guide for module information!", oPC, false);
