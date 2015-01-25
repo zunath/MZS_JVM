@@ -1,67 +1,85 @@
 package mzsJVM.Entities;
 
-import java.io.Serializable;
+import javax.persistence.*;
 
 @SuppressWarnings("UnusedDeclaration")
-public class AuthorizedDMEntity implements Serializable {
-    private int _authorizedDMID;
-    private String _name;
-    private String _cdKey;
-    private int _dmRole;
-    private boolean _isActive;
+@Entity
+@Table(name="authorized_dm")
+public class AuthorizedDMEntity {
+
+    @Id
+    @Column(name="AuthorizedDMID")
+    private int authorizedDMId;
+
+    @Column(name="Name")
+    private String name;
+
+    @Column(name="CDKey")
+    private String cdKey;
+
+    @Column(name="DMRole")
+    private int dmRole;
+
+    @Column(name="IsActive")
+    private boolean isActive;
 
 
-    public AuthorizedDMEntity(int authorizedDMID,
+    public AuthorizedDMEntity(int authorizedDMId,
                               String name,
                               String cdKey,
                               int dmRole,
                               boolean isActive)
     {
-        _authorizedDMID = authorizedDMID;
-        _name = name;
-        _cdKey = cdKey;
-        _dmRole = dmRole;
-        _isActive = isActive;
+        this.authorizedDMId = authorizedDMId;
+        this.name = name;
+        this.cdKey = cdKey;
+        this.dmRole = dmRole;
+        this.isActive = isActive;
+    }
+
+    public AuthorizedDMEntity()
+    {
+
     }
 
 
     public int getDMRole() {
-        return _dmRole;
+        return this.dmRole;
     }
 
     public void setDMRole(int _dmRole) {
-        this._dmRole = _dmRole;
+        this.dmRole = _dmRole;
     }
 
-    public int getAuthorizedDMID() {
-        return _authorizedDMID;
+    public int getAuthorizedDMId() {
+        return authorizedDMId;
     }
 
-    public void setAuthorizedDMID(int _authorizedDMID) {
-        this._authorizedDMID = _authorizedDMID;
+    public void setAuthorizedDMID(int _authorizedDMId) {
+        this.authorizedDMId = _authorizedDMId;
     }
 
     public String getName() {
-        return _name;
+        return this.name;
     }
 
-    public void setName(String _name) {
-        this._name = _name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCDKey() {
-        return _cdKey;
+        return this.cdKey;
     }
 
-    public void setCDKey(String _cdKey) {
-        this._cdKey = _cdKey;
+    public void setCDKey(String cdKey) {
+        this.cdKey = cdKey;
     }
 
     public boolean getIsActive() {
-        return _isActive;
+        return this.isActive;
     }
 
-    public void setIsActive(boolean _isActive) {
-        this._isActive = _isActive;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

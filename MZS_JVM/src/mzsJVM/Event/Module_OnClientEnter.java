@@ -1,7 +1,9 @@
-package mzsJVM;
+package mzsJVM.Event;
 
+import mzsJVM.Constants;
 import mzsJVM.Data.ItemDTO;
-import mzsJVM.GameObjects.CreatureGO;
+import mzsJVM.GameObject.CreatureGO;
+import mzsJVM.IScriptEventHandler;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.*;
 import java.util.ArrayList;

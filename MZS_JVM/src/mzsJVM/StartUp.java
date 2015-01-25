@@ -55,6 +55,6 @@ public class StartUp {
 	 */
 	@SuppressWarnings("unused")
 	private static void shutdown() {
-		DataAccess.Shutdown();
+
 	}
 }

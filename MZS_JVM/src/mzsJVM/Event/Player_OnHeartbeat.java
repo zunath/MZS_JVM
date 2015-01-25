@@ -1,5 +1,7 @@
-package mzsJVM;
+package mzsJVM.Event;
 
+import mzsJVM.Constants;
+import mzsJVM.IScriptEventHandler;
 import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
 import org.nwnx.nwnx2.jvm.constants.Duration;

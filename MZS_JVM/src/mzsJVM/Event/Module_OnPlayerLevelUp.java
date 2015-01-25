@@ -1,7 +1,9 @@
-package mzsJVM;
+package mzsJVM.Event;
+import mzsJVM.IScriptEventHandler;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.ClassType;
 
+@SuppressWarnings("UnusedDeclaration")
 public class Module_OnPlayerLevelUp implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {

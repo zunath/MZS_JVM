@@ -1,8 +1,10 @@
-package mzsJVM;
+package mzsJVM.Event;
 import mzsJVM.Bioware.*;
+import mzsJVM.IScriptEventHandler;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.*;
 
+@SuppressWarnings("UnusedDeclaration")
 public class Module_OnActivateItem implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {

@@ -1,11 +1,19 @@
 package mzsJVM.Data;
+import mzsJVM.Entities.AuthorizedDMEntity;
+import mzsJVM.Entities.DMRoleEntity;
+import mzsJVM.Entities.PlayerEntity;
+import mzsJVM.Entities.StorageEntity;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
-import java.sql.Connection;
 import java.util.List;
 
 public class DataAccess {
@@ -13,12 +21,14 @@ public class DataAccess {
     private static String _username;
     private static String _password;
     private static String _schema;
-    private static Connection _connection;
 
+    private static SessionFactory _sessionFactory;
+    private static Configuration _configuration;
+    private static ServiceRegistry _serviceRegistry;
 
     public static void Initialize()
     {
-        Path path = Paths.get("mzs2-db-settings.txt");
+        Path path = Paths.get("./jvm/mzs2-db-settings.txt");
 
         try
         {
@@ -29,21 +39,19 @@ public class DataAccess {
             {
                 String[] parts = row.split("=");
 
-                if(parts[0].equals("host"))
-                {
-                    _host = parts[1];
-                }
-                else if(parts[0].equals("username"))
-                {
-                    _username = parts[1];
-                }
-                else if(parts[0].equals("password"))
-                {
-                    _password = parts[1];
-                }
-                else if(parts[0].equals("schema"))
-                {
-                    _schema = parts[1];
+                switch (parts[0]) {
+                    case "host":
+                        _host = parts[1];
+                        break;
+                    case "username":
+                        _username = parts[1];
+                        break;
+                    case "password":
+                        _password = parts[1];
+                        break;
+                    case "schema":
+                        _schema = parts[1];
+                        break;
                 }
 
             }
@@ -52,44 +60,39 @@ public class DataAccess {
             // TODO: Log exception
         }
 
-        LoadDriver();
-        CreateConnection();
+        CreateSessionFactory();
     }
 
-    private static void LoadDriver()
+
+    private static void CreateSessionFactory()
     {
-        try
-        {
-            Class.forName("com.mysql.jdbc.Driver");
-        }
-        catch (ClassNotFoundException ex)
-        {
-            // TODO: Logging
-        }
+        _configuration = new Configuration();
+
+        _configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+        _configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" + _host + "/" + _schema);
+        _configuration.setProperty("hibernate.connection.username", _username);
+        _configuration.setProperty("hibernate.connection.password", _password);
+        _configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        _configuration.setProperty("hibernate.cache.use_second_level_cache", "false");
+        _configuration.setProperty("hibernate.cache.use_query_cache", "false");
+        _configuration.setProperty("hibernate.current_session_context_class", "thread");
+
+        // Link all DB entities to the configuration here.
+        _configuration.addAnnotatedClass(AuthorizedDMEntity.class);
+        _configuration.addAnnotatedClass(DMRoleEntity.class);
+        _configuration.addAnnotatedClass(PlayerEntity.class);
+        _configuration.addAnnotatedClass(StorageEntity.class);
+
+
+        _serviceRegistry = new ServiceRegistryBuilder().applySettings(
+                        _configuration.getProperties()).buildServiceRegistry();
+
+        _sessionFactory = _configuration.buildSessionFactory(_serviceRegistry);
+
     }
 
-    private static void CreateConnection()
+    public static Session getSession()
     {
-        try
-        {
-            _connection = DriverManager.getConnection("jdbc:mysql://" + _host + "/" + _schema,
-                    _username,
-                    _password);
-        }
-        catch (SQLException ex)
-        {
-            // TODO: Logging
-        }
-    }
-
-    public static void Shutdown()
-    {
-        try {
-            _connection.close();
-        }
-        catch (SQLException ex)
-        {
-            // TODO: Log error
-        }
+        return _sessionFactory.getCurrentSession();
     }
 }

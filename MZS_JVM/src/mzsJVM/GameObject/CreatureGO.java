@@ -1,4 +1,4 @@
-package mzsJVM.GameObjects;
+package mzsJVM.GameObject;
 
 import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;

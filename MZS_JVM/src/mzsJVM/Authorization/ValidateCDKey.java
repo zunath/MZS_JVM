@@ -1,6 +1,8 @@
 package mzsJVM.Authorization;
 
+import mzsJVM.Entities.AuthorizedDMEntity;
 import mzsJVM.IScriptEventHandler;
+import mzsJVM.Repository.AuthorizedDMRepository;
 import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
 
@@ -12,12 +14,20 @@ public class ValidateCDKey implements IScriptEventHandler {
         String sCDKey = NWScript.getPCPublicCDKey(pc, false);
         String sPlayerName = NWScript.getPCPlayerName(pc);
         String sIP = NWScript.getPCIPAddress(pc);
+        boolean isDM = false;
+        AuthorizedDMRepository repo = new AuthorizedDMRepository();
 
         if (NWScript.getIsDM(pc) || (NWScript.getIsDMPossessed(pc) && NWScript.getIsDM(NWScript.getMaster(pc))))
         {
-            boolean isDM = false; // TODO: Database call to verify CD key is authorized to log in as a DM.
+            AuthorizedDMEntity entity = repo.getByCDKey(sCDKey);
 
-            if (isDM) {
+            if(entity != null && entity.getDMRole() > 0)
+            {
+                isDM = true;
+            }
+
+            if (isDM)
+            {
                 NWScript.sendMessageToAllDMs("<DM authorized to join server, " + sCDKey + ", " + sPlayerName + ">" );
             }
             else
