@@ -1,6 +1,8 @@
 package mzsJVM.Authorization;
 
+import mzsJVM.Entities.AuthorizedDMEntity;
 import mzsJVM.IScriptEventHandler;
+import mzsJVM.Repository.AuthorizedDMRepository;
 import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
 
@@ -9,9 +11,16 @@ public class ValidateDM implements IScriptEventHandler {
     @Override
     public void runScript(NWObject objSelf) {
 
-        // TODO: Access database and check to see if objSelf (the player)
-        //       is a DM.
+        String cdKey = NWScript.getPCPublicCDKey(objSelf, false);
+        AuthorizedDMRepository repo = new AuthorizedDMRepository();
+        AuthorizedDMEntity entity = repo.getByCDKey(cdKey);
+        int isDM = 0;
 
-        NWScript.setLocalInt(objSelf, "AUTH_IS_DM", 0);
+        if(entity != null && entity.getDMRole() == 1) // 1 = DM
+        {
+            isDM = 1;
+        }
+
+        NWScript.setLocalInt(objSelf, "AUTH_IS_DM", isDM);
     }
 }

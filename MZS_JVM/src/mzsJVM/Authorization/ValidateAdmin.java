@@ -16,7 +16,7 @@ public class ValidateAdmin implements IScriptEventHandler {
         AuthorizedDMRepository repo = new AuthorizedDMRepository();
         AuthorizedDMEntity entity = repo.getByCDKey(cdKey);
 
-        if(entity != null && entity.getDMRole() == 2)
+        if(entity != null && entity.getDMRole() == 2) // 2 = Admin
         {
             isAdmin = 1;
         }
