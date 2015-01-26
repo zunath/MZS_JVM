@@ -5,13 +5,15 @@ public class ItemDTO {
     private String _resref;
     private String _tag;
     private String _nameFormat;
+    private boolean _replace;
 
-    public ItemDTO(String resref, String tag, int version, String nameFormat)
+    public ItemDTO(String resref, String tag, int version, String nameFormat, boolean replace)
     {
         _tag = tag;
         _version = version;
         _resref = resref;
         _nameFormat = nameFormat;
+        _replace = replace;
     }
 
     public void SetTag(String tag)
@@ -53,4 +55,13 @@ public class ItemDTO {
         _nameFormat = nameFormat;
     }
 
+    public boolean GetReplace()
+    {
+        return _replace;
+    }
+
+    public void SetReplace(boolean replace)
+    {
+        _replace = replace;
+    }
 }

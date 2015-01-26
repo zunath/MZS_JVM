@@ -1,15 +1,45 @@
 package mzsJVM.GameObject;
 
+import mzsJVM.Constants;
+import mzsJVM.Entities.PlayerEntity;
+import org.nwnx.nwnx2.jvm.NWLocation;
 import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
 import org.nwnx.nwnx2.jvm.constants.Inventory;
 
-public class CreatureGO {
+import java.util.Date;
+
+public class PlayerGO {
     private NWObject _pc;
 
-    public CreatureGO(NWObject pc)
+    public PlayerGO(NWObject pc)
     {
         _pc = pc;
+    }
+
+    public String getUUID()
+    {
+        NWObject oDatabase = NWScript.getItemPossessedBy(_pc, Constants.PCDatabaseTag);
+        return NWScript.getLocalString(oDatabase, Constants.PCIDNumberVariable);
+    }
+
+    public PlayerEntity createEntity()
+    {
+        String uuid = NWScript.getLocalString(_pc, Constants.PCIDNumberVariable);
+        NWLocation location = NWScript.getLocation(_pc);
+
+        PlayerEntity entity = new PlayerEntity();
+        entity.setPCID(uuid);
+        entity.setCharacterName(NWScript.getName(_pc, false));
+        entity.setHitPoints(NWScript.getCurrentHitPoints(_pc));
+        entity.setLocationAreaTag(NWScript.getTag(NWScript.getArea(_pc)));
+        entity.setLocationOrientation(NWScript.getFacing(_pc));
+        entity.setLocationX(location.getX());
+        entity.setLocationY(location.getY());
+        entity.setLocationZ(location.getZ());
+        entity.setCreateTimestamp(new Date());
+
+        return entity;
     }
 
     public void destroyAllInventoryItems()

@@ -8,22 +8,22 @@ import org.nwnx.nwnx2.jvm.NWVector;
 @SuppressWarnings("UnusedDeclaration")
 public class NWNX_Funcs {
 
-    int NWNXFuncsZero (NWObject oObject, String sFunc) {
+    private static int NWNXFuncsZero (NWObject oObject, String sFunc) {
         NWScript.setLocalString(oObject, sFunc, "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oObject, sFunc));
     }
 
-    int NWNXFuncsOne (NWObject oObject, String sFunc, int nVal1) {
+    private static int NWNXFuncsOne (NWObject oObject, String sFunc, int nVal1) {
         NWScript.setLocalString(oObject, sFunc, NWScript.intToString(nVal1) + "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oObject, sFunc));
     }
 
-    int NWNXFuncsTwo (NWObject oObject, String sFunc, int nVal1, int nVal2) {
+    private static int NWNXFuncsTwo (NWObject oObject, String sFunc, int nVal1, int nVal2) {
         NWScript.setLocalString(oObject, sFunc, NWScript.intToString(nVal1) + " " + NWScript.intToString(nVal2) + "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oObject, sFunc));
     }
 
-    int NWNXFuncsThree (NWObject oObject, String sFunc, int nVal1, int nVal2, int nVal3) {
+    private static int NWNXFuncsThree (NWObject oObject, String sFunc, int nVal1, int nVal2, int nVal3) {
         NWScript.setLocalString(oObject, sFunc, NWScript.intToString(nVal1) + " " + NWScript.intToString(nVal2) +
                 " " + NWScript.intToString(nVal3) + "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oObject, sFunc));
@@ -34,7 +34,7 @@ public class NWNX_Funcs {
         NWNXFuncsOne(NWObject.MODULE, "NWNX!FUNCS!USLEEP", usec);
     }
 
-    TimeValue GetTimeOfDay() {
+    public static TimeValue GetTimeOfDay() {
         TimeValue ret = new TimeValue();
         String sFunc = "NWNX!FUNCS!GETTIMEOFDAY";
         NWScript.setLocalString(NWObject.MODULE,
@@ -48,42 +48,42 @@ public class NWNX_Funcs {
         return ret;
     }
 
-    int SetAbilityScore (NWObject oCreature, int nAbility, int nValue) {
+    public static int SetAbilityScore (NWObject oCreature, int nAbility, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETABILITYSCORE", nAbility, nValue);
     }
 
-    int ModifyAbilityScore (NWObject oCreature, int nAbility, int nValue) {
+    public static int ModifyAbilityScore (NWObject oCreature, int nAbility, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!MODIFYABILITYSCORE", nAbility, nValue);
     }
 
 
-    int SetSkillRank (NWObject oCreature, int nSkill, int nValue) {
+    public static int SetSkillRank (NWObject oCreature, int nSkill, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETSKILLRANK", nSkill, nValue);
     }
 
-    int ModifySkillRank (NWObject oCreature, int nSkill, int nValue) {
+    public static int ModifySkillRank (NWObject oCreature, int nSkill, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!MODIFYSKILLRANK", nSkill, nValue);
     }
 
-    int ModifySkillRankByLevel (NWObject oCreature, int nLevel, int nSkill, int nValue) {
+    public static int ModifySkillRankByLevel (NWObject oCreature, int nLevel, int nSkill, int nValue) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!MODIFYSKILLRANKBYLEVEL", nLevel, nSkill, nValue);
     }
 
 
-    int GetACNaturalBase (NWObject oCreature) {
+    public static int GetACNaturalBase (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETACNATURALBASE");
     }
 
-    int SetACNaturalBase (NWObject oCreature, int nAC) {
+    public static int SetACNaturalBase (NWObject oCreature, int nAC) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETACNATURALBASE", nAC);
     }
 
 
-    int GetKnowsFeat (int nFeatId, NWObject oCreature) {
+    public static int GetKnowsFeat (int nFeatId, NWObject oCreature) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETKNOWSFEAT", nFeatId);
     }
 
-    int AddKnownFeat (NWObject oCreature, int nFeat, int nLevel) {
+    public static int AddKnownFeat (NWObject oCreature, int nFeat, int nLevel) {
         if (nLevel == 0)
             nLevel = NWScript.getHitDice(oCreature);
 
@@ -93,47 +93,47 @@ public class NWNX_Funcs {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!ADDKNOWNFEAT", nFeat);
     }
 
-    int RemoveKnownFeat (NWObject oCreature, int nFeat) {
+    public static int RemoveKnownFeat (NWObject oCreature, int nFeat) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!REMOVEKNOWNFEAT", nFeat);
     }
 
 
-    int GetTotalKnownFeats (NWObject oCreature) {
+    public static int GetTotalKnownFeats (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETTOTALKNOWNFEATS");
     }
 
-    int GetKnownFeat (NWObject oCreature, int nIndex) {
+    public static int GetKnownFeat (NWObject oCreature, int nIndex) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETKNOWNFEAT", nIndex);
     }
 
-    int SetKnownFeat (NWObject oCreature, int nIndex, int nFeat) {
+    public static int SetKnownFeat (NWObject oCreature, int nIndex, int nFeat) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETKNOWNFEAT", nIndex, nFeat);
     }
 
 
-    int GetTotalKnownFeatsByLevel (NWObject oCreature, int nLevel) {
+    public static int GetTotalKnownFeatsByLevel (NWObject oCreature, int nLevel) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETTOTALKNOWNFEATSBYLEVEL", nLevel);
     }
 
-    int GetKnownFeatByLevel (NWObject oCreature, int nLevel, int nIndex) {
+    public static int GetKnownFeatByLevel (NWObject oCreature, int nLevel, int nIndex) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETKNOWNFEATBYLEVEL", nLevel, nIndex);
     }
 
-    int SetKnownFeatByLevel (NWObject oCreature, int nLevel, int nIndex, int nFeat) {
+    public static int SetKnownFeatByLevel (NWObject oCreature, int nLevel, int nIndex, int nFeat) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!SETKNOWNFEATBYLEVEL", nLevel, nIndex, nFeat);
     }
 
 
-    int GetRemainingFeatUses (NWObject oCreature, int nFeat) {
+    public static int GetRemainingFeatUses (NWObject oCreature, int nFeat) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETREMAININGFEATUSES", nFeat);
     }
 
-    int GetTotalFeatUses (NWObject oCreature, int nFeat) {
+    public static int GetTotalFeatUses (NWObject oCreature, int nFeat) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETTOTALFEATUSES", nFeat);
     }
 
 
-    String GetAllRemainingFeatUses (NWObject oCreature) {
+    public static String GetAllRemainingFeatUses (NWObject oCreature) {
         String sFeats = NWScript.getLocalString(NWObject.MODULE, "NWNX!ODBC!SPACER");
 
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETALLREMAININGFEATUSES", sFeats + sFeats + sFeats + sFeats);
@@ -143,17 +143,17 @@ public class NWNX_Funcs {
         return sFeats;
     }
 
-    int RestoreReadyFeats (NWObject oCreature, String sFeats) {
+    public static int RestoreReadyFeats (NWObject oCreature, String sFeats) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!RESTOREREADYFEATS", sFeats + " ");
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!RESTOREREADYFEATS"));
     }
 
 
-    int GetMeetsFeatRequirements (NWObject oCreature, int nFeat) {
+    public static int GetMeetsFeatRequirements (NWObject oCreature, int nFeat) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETMEETSFEATREQUIREMENTS", nFeat);
     }
 
-    int GetMeetsLevelUpFeatRequirements (NWObject oCreature, int nFeat, int nClass, int nAbility, CreatureSkills sk) {
+    public static int GetMeetsLevelUpFeatRequirements (NWObject oCreature, int nFeat, int nClass, int nAbility, CreatureSkills sk) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETMEETSFEATREQUIREMENTS", ">" +
                 NWScript.intToString(nFeat) + " " +
                 NWScript.intToString(nClass) + " " +
@@ -190,45 +190,45 @@ public class NWNX_Funcs {
     }
 
 
-    int GetIsClassBonusFeat (int nClass, int nFeat) {
+    public static int GetIsClassBonusFeat (int nClass, int nFeat) {
         return NWNXFuncsTwo(NWObject.MODULE, "NWNX!FUNCS!GETISCLASSBONUSFEAT", nClass, nFeat);
     }
 
-    int GetIsClassGeneralFeat (int nClass, int nFeat) {
+    public static int GetIsClassGeneralFeat (int nClass, int nFeat) {
         return NWNXFuncsTwo(NWObject.MODULE, "NWNX!FUNCS!GETISCLASSGENERALFEAT", nClass, nFeat);
     }
 
-    int GetIsClassGrantedFeat (int nClass, int nFeat) {
+    public static int GetIsClassGrantedFeat (int nClass, int nFeat) {
         return NWNXFuncsTwo(NWObject.MODULE, "NWNX!FUNCS!GETISCLASSGRANTEDFEAT", nClass, nFeat);
     }
 
-    int GetIsClassSkill (int nClass, int nSkill) {
+    public static int GetIsClassSkill (int nClass, int nSkill) {
         return NWNXFuncsTwo(NWObject.MODULE, "NWNX!FUNCS!GETISCLASSSKILL", nClass, nSkill);
     }
 
 
-    int GetClassByLevel (NWObject oCreature, int nLevel) {
+    public static int GetClassByLevel (NWObject oCreature, int nLevel) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETCLASSBYLEVEL", nLevel);
     }
 
-    int GetAbilityIncreaseByLevel (NWObject oCreature, int nLevel) {
+    public static int GetAbilityIncreaseByLevel (NWObject oCreature, int nLevel) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETABILITYINCREASEBYLEVEL", nLevel);
     }
 
-    int GetSkillIncreaseByLevel (NWObject oCreature, int nLevel, int nSkill) {
+    public static int GetSkillIncreaseByLevel (NWObject oCreature, int nLevel, int nSkill) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETSKILLINCREASEBYLEVEL", nLevel, nSkill);
     }
 
 
-    int GetSavingThrowBonus (NWObject oCreature, int nSave) {
+    public static int GetSavingThrowBonus (NWObject oCreature, int nSave) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETSAVINGTHROWBONUS", nSave);
     }
 
-    int SetSavingThrowBonus (NWObject oCreature, int nSave, int nValue) {
+    public static int SetSavingThrowBonus (NWObject oCreature, int nSave, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETSAVINGTHROWBONUS", nSave, nValue);
     }
 
-    int ModifySavingThrowBonus (NWObject oCreature, int nSave, int nValue) {
+    public static int ModifySavingThrowBonus (NWObject oCreature, int nSave, int nValue) {
         if (nSave < 1 || nSave > 3)
             return -1;
 
@@ -243,121 +243,121 @@ public class NWNX_Funcs {
     }
 
 
-    int GetMaxHitPointsByLevel (NWObject oCreature, int nLevel) {
+    public static int GetMaxHitPointsByLevel (NWObject oCreature, int nLevel) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETMAXHITPOINTSBYLEVEL", nLevel);
     }
 
-    int SetMaxHitPointsByLevel (NWObject oCreature, int nLevel, int nValue) {
+    public static int SetMaxHitPointsByLevel (NWObject oCreature, int nLevel, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETMAXHITPOINTSBYLEVEL", nLevel, nValue);
     }
 
 
-    int SetGender (NWObject oCreature, int nSize) {
+    public static int SetGender (NWObject oCreature, int nSize) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETGENDER", nSize);
     }
 
-    int SetCreatureSize (NWObject oCreature, int nSize) {
+    public static int SetCreatureSize (NWObject oCreature, int nSize) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETCREATURESIZE", nSize);
     }
 
 
-    int GetCriticalHitMultiplier (NWObject oCreature, int bOffhand) {
+    public static int GetCriticalHitMultiplier (NWObject oCreature, int bOffhand) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETCRITICALHITMULTIPLIER", bOffhand);
     }
 
-    int GetCriticalHitRange (NWObject oCreature, int bOffhand) {
+    public static int GetCriticalHitRange (NWObject oCreature, int bOffhand) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETCRITICALHITRANGE", bOffhand);
     }
 
 
-    int GetPCSkillPoints (NWObject oPC) {
+    public static int GetPCSkillPoints (NWObject oPC) {
         return NWNXFuncsZero(oPC, "NWNX!FUNCS!GETPCSKILLPOINTS");
     }
 
-    int SetPCSkillPoints (NWObject oPC, int nSkillPoints) {
+    public static int SetPCSkillPoints (NWObject oPC, int nSkillPoints) {
         return NWNXFuncsOne(oPC, "NWNX!FUNCS!SETPCSKILLPOINTS", nSkillPoints);
     }
 
 
-    int SetPCLootable (NWObject oPC, int nLootable) {
+    public static int SetPCLootable (NWObject oPC, int nLootable) {
         return NWNXFuncsOne(oPC, "NWNX!FUNCS!SETPCLOOTABLE", nLootable);
     }
 
 
-    int GetPCBodyBag (NWObject oPC) {
+    public static int GetPCBodyBag (NWObject oPC) {
         return NWNXFuncsZero(oPC, "NWNX!FUNCS!GETPCBODYBAG");
     }
 
-    int SetPCBodyBag (NWObject oPC, int nBodyBag) {
+    public static int SetPCBodyBag (NWObject oPC, int nBodyBag) {
         return NWNXFuncsOne(oPC, "NWNX!FUNCS!SETPCBODYBAG", nBodyBag);
     }
 
 
-    int GetDamageImmunity (NWObject oCreature, int nDamType) {
+    public static int GetDamageImmunity (NWObject oCreature, int nDamType) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETDAMAGEIMMUNITY", nDamType);
     }
 
 
-    int SetAlignmentGoodEvil (NWObject oCreature, int nValue) {
+    public static int SetAlignmentGoodEvil (NWObject oCreature, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETALIGNMENTVALUE", 0, nValue);
     }
 
-    int SetAlignmentLawChaos (NWObject oCreature, int nValue) {
+    public static int SetAlignmentLawChaos (NWObject oCreature, int nValue) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETALIGNMENTVALUE", 1, nValue);
     }
 
 
-    int ModifyCurrentHitPoints (NWObject oCreature, int nHP) {
+    public static int ModifyCurrentHitPoints (NWObject oCreature, int nHP) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!MODIFYCURRENTHITPOINTS", nHP);
     }
 
-    int SetCurrentHitPoints (NWObject oCreature, int nHP) {
+    public static int SetCurrentHitPoints (NWObject oCreature, int nHP) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETCURRENTHITPOINTS", nHP);
     }
 
-    int SetMaxHitPoints (NWObject oCreature, int nHP) {
+    public static int SetMaxHitPoints (NWObject oCreature, int nHP) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETMAXHITPOINTS", nHP);
     }
 
 
-    int RecalculateDexModifier (NWObject oCreature) {
+    public static int RecalculateDexModifier (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!RECALCULATEDEXMODIFIER");
     }
 
 
-    int GetKnowsSpell (int nSpellId, NWObject oCreature, int nClass) {
+    public static int GetKnowsSpell (int nSpellId, NWObject oCreature, int nClass) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETKNOWSSPELL", nClass, nSpellId);
     }
 
-    int GetKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nIndex) {
+    public static int GetKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nIndex) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!GETKNOWNSPELL", nClass, nSpellLevel, nIndex);
     }
 
-    int SetKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nIndex, int nSpellId) {
+    public static int SetKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nIndex, int nSpellId) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!SETKNOWNSPELL",
                 NWScript.intToString(nClass) + " " + NWScript.intToString(nSpellLevel) + " " +
                         NWScript.intToString(nIndex) + " " + NWScript.intToString(nSpellId) + "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!SETKNOWNSPELL"));
     }
 
-    int GetTotalKnownSpells (NWObject oCreature, int nClass, int nSpellLevel) {
+    public static int GetTotalKnownSpells (NWObject oCreature, int nClass, int nSpellLevel) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETTOTALKNOWNSPELLS", nClass, nSpellLevel);
     }
 
-    int AddKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nSpellId) {
+    public static int AddKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nSpellId) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!ADDKNOWNSPELL", nClass, nSpellLevel, nSpellId);
     }
 
-    int RemoveKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nSpellId) {
+    public static int RemoveKnownSpell (NWObject oCreature, int nClass, int nSpellLevel, int nSpellId) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!REMOVEKNOWNSPELL", nClass, nSpellLevel, nSpellId);
     }
 
-    int ReplaceKnownSpell (NWObject oCreature, int nClass, int nOldSpell, int nNewSpell) {
+    public static int ReplaceKnownSpell (NWObject oCreature, int nClass, int nOldSpell, int nNewSpell) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!REPLACEKNOWNSPELL", nClass, nOldSpell, nNewSpell);
     }
 
 
-    MemorizedSpellSlot GetMemorizedSpell (NWObject oCreature, int nClass, int nLevel, int nIndex) {
+    public static MemorizedSpellSlot GetMemorizedSpell (NWObject oCreature, int nClass, int nLevel, int nIndex) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETMEMORIZEDSPELL",
                 NWScript.intToString(nClass) + " " + NWScript.intToString(nLevel) + " " + NWScript.intToString(nIndex) + "          ");
 
@@ -375,7 +375,7 @@ public class NWNX_Funcs {
         return mss;
     }
 
-    int SetMemorizedSpell (NWObject oCreature, int nClass, int nLevel, int nIndex, MemorizedSpellSlot mss) {
+    public static int SetMemorizedSpell (NWObject oCreature, int nClass, int nLevel, int nIndex, MemorizedSpellSlot mss) {
 
         boolean isReady = mss.ready != 0;
         boolean domainSet = mss.domain != 0;
@@ -389,7 +389,7 @@ public class NWNX_Funcs {
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!GETMEMORIZEDSPELL"));
     }
 
-    int ClearMemorizedSpell (NWObject oCreature, int nClass, int nLevel, int nIndex) {
+    public static int ClearMemorizedSpell (NWObject oCreature, int nClass, int nLevel, int nIndex) {
         MemorizedSpellSlot mss = new MemorizedSpellSlot();
 
         mss.id = -1;
@@ -397,24 +397,24 @@ public class NWNX_Funcs {
     }
 
 
-    int GetMaxSpellSlots (NWObject oCreature, int nClass, int nSpellLevel) {
+    public static int GetMaxSpellSlots (NWObject oCreature, int nClass, int nSpellLevel) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETMAXSPELLSLOTS", nClass, nSpellLevel);
     }
 
-    int GetBonusSpellSlots (NWObject oCreature, int nClass, int nSpellLevel) {
+    public static int GetBonusSpellSlots (NWObject oCreature, int nClass, int nSpellLevel) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETBONUSSPELLSLOTS", nClass, nSpellLevel);
     }
 
-    int GetRemainingSpellSlots (NWObject oCreature, int nClass, int nSpellLevel) {
+    public static int GetRemainingSpellSlots (NWObject oCreature, int nClass, int nSpellLevel) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!GETREMAININGSPELLSLOTS", nClass, nSpellLevel);
     }
 
-    int SetRemainingSpellSlots (NWObject oCreature, int nClass, int nSpellLevel, int nSlots) {
+    public static int SetRemainingSpellSlots (NWObject oCreature, int nClass, int nSpellLevel, int nSlots) {
         return NWNXFuncsThree(oCreature, "NWNX!FUNCS!SETREMAININGSPELLSLOTS", nClass, nSpellLevel, nSlots);
     }
 
 
-    String GetAllMemorizedSpells (NWObject oCreature) {
+    public static String GetAllMemorizedSpells (NWObject oCreature) {
         String sSpells = NWScript.getLocalString(NWObject.MODULE, "NWNX!ODBC!SPACER");
 
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETALLMEMORIZEDSPELLS", sSpells + sSpells + sSpells + sSpells);
@@ -424,30 +424,30 @@ public class NWNX_Funcs {
         return sSpells;
     }
 
-    int RestoreReadySpells (NWObject oCreature, String sSpells) {
+    public static int RestoreReadySpells (NWObject oCreature, String sSpells) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!RESTOREREADYSPELLS", sSpells + " ");
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!RESTOREREADYSPELLS"));
     }
 
 
-    int GetClericDomain (NWObject oCreature, int nIndex) {
+    public static int GetClericDomain (NWObject oCreature, int nIndex) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!GETCLERICDOMAIN", nIndex);
     }
 
-    int SetClericDomain (NWObject oCreature, int nIndex, int nDomain) {
+    public static int SetClericDomain (NWObject oCreature, int nIndex, int nDomain) {
         return NWNXFuncsTwo(oCreature, "NWNX!FUNCS!SETCLERICDOMAIN", nIndex, nDomain);
     }
 
-    int GetWizardSpecialization (NWObject oCreature) {
+    public static int GetWizardSpecialization (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETWIZARDSPECIALIZATION");
     }
 
-    int SetWizardSpecialization (NWObject oCreature, int nSchool) {
+    public static int SetWizardSpecialization (NWObject oCreature, int nSchool) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETWIZARDSPECIALIZATION", nSchool);
     }
 
 
-    SpecialAbilitySlot GetSpecialAbility (NWObject oCreature, int nIndex) {
+    public static SpecialAbilitySlot GetSpecialAbility (NWObject oCreature, int nIndex) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETSPECIALABILITY",
                 NWScript.intToString(nIndex) + "          ");
 
@@ -465,81 +465,81 @@ public class NWNX_Funcs {
         return sas;
     }
 
-    int SetSpecialAbility (NWObject oCreature, int nIndex, SpecialAbilitySlot sas) {
+    public static int SetSpecialAbility (NWObject oCreature, int nIndex, SpecialAbilitySlot sas) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!SETSPECIALABILITY",
                 NWScript.intToString(nIndex) + " " + NWScript.intToString(sas.id) + " " +
                         NWScript.intToString(sas.level & 0x7F) + " " + NWScript.intToString((sas.ready != 0) ? 1 : 0) + "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!SETSPECIALABILITY"));
     }
 
-    int GetTotalSpecialAbilities (NWObject oCreature) {
+    public static int GetTotalSpecialAbilities (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETTOTALSPECIALABILITIES");
     }
 
-    int AddSpecialAbility (NWObject oCreature, SpecialAbilitySlot sas) {
+    public static int AddSpecialAbility (NWObject oCreature, SpecialAbilitySlot sas) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!ADDSPECIALABILITY",
                 NWScript.intToString(sas.id) + " " + NWScript.intToString(sas.level & 0x7F) + " " + NWScript.intToString((sas.ready != 0) ? 1 : 0) + "          ");
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!ADDSPECIALABILITY"));
     }
 
-    int RemoveSpecialAbility (NWObject oCreature, int nIndex) {
+    public static int RemoveSpecialAbility (NWObject oCreature, int nIndex) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!REMOVESPECIALABILITY", nIndex);
     }
 
 
-    String GetRawQuickBarSlot (NWObject oPC, int nSlot) {
+    public static String GetRawQuickBarSlot (NWObject oPC, int nSlot) {
         NWScript.setLocalString(oPC, "NWNX!FUNCS!GETQUICKBARSLOT",
                 NWScript.intToString(nSlot) + "                                                                                                                                ");
         return NWScript.getLocalString(oPC, "NWNX!FUNCS!GETQUICKBARSLOT");
     }
 
-    void SetRawQuickBarSlot (NWObject oPC, String sSlot) {
+    public static void SetRawQuickBarSlot (NWObject oPC, String sSlot) {
         NWScript.setLocalString(oPC, "NWNX!FUNCS!SETQUICKBARSLOT", sSlot);
     }
 
 
-    String GetPortrait (NWObject oCreature) {
+    public static String GetPortrait (NWObject oCreature) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETPORTRAIT", "                    ");
         return NWScript.getLocalString(oCreature, "NWNX!FUNCS!GETPORTRAIT");
     }
 
-    int SetPortrait (NWObject oCreature, String sPortrait) {
+    public static int SetPortrait (NWObject oCreature, String sPortrait) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!SETPORTRAIT", sPortrait);
         return NWScript.stringToInt(NWScript.getLocalString(oCreature, "NWNX!FUNCS!SETPORTRAIT"));
     }
 
 
-    int GetSoundset (NWObject oCreature) {
+    public static int GetSoundset (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETSOUNDSET");
     }
 
-    int SetSoundset (NWObject oCreature, int nSoundset) {
+    public static int SetSoundset (NWObject oCreature, int nSoundset) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETSOUNDSET", nSoundset);
     }
 
 
-    int SetTrapCreator (NWObject oTrap, NWObject oCreator) {
+    public static int SetTrapCreator (NWObject oTrap, NWObject oCreator) {
         NWScript.setLocalString(oTrap, "NWNX!FUNCS!SETTRAPCREATOR", String.valueOf(oCreator.getObjectId()));
         return NWScript.stringToInt(NWScript.getLocalString(oTrap, "NWNX!FUNCS!SETTRAPCREATOR"));
     }
 
 
-    String GetConversation (NWObject oCreature) {
+    public static String GetConversation (NWObject oCreature) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETCONVERSATION", "                ");
         return NWScript.getLocalString(oCreature, "NWNX!FUNCS!GETCONVERSATION");
     }
 
-    String SetConversation (NWObject oCreature, String sConv) {
+    public static String SetConversation (NWObject oCreature, String sConv) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!SETCONVERSATION", sConv);
         return NWScript.getLocalString(oCreature, "NWNX!FUNCS!SETCONVERSATION");
     }
 
 
-    boolean GetIsVariableValid (LocalVariable lv) {
+    public static boolean GetIsVariableValid (LocalVariable lv) {
         return (lv.type >= 1 && lv.type <= 5);
     }
 
-    int GetLocalVariableCount (NWObject oObject) {
+    public static int GetLocalVariableCount (NWObject oObject) {
         NWScript.deleteLocalString(oObject, "NWNX!FUNCS!GETLOCALVARIABLECOUNT");
         NWScript.deleteLocalString(oObject, "NWNX!FUNCS!GETLOCALVARIABLEBYPOSITION");
 
@@ -550,7 +550,7 @@ public class NWNX_Funcs {
     }
 
 
-    LocalVariable GetLocalVariableByPosition (NWObject oObject, int nPos) {
+    public static LocalVariable GetLocalVariableByPosition (NWObject oObject, int nPos) {
         LocalVariable lv = new LocalVariable();
 
         NWScript.deleteLocalString(oObject, "NWNX!FUNCS!GETLOCALVARIABLEBYPOSITION");
@@ -568,15 +568,15 @@ public class NWNX_Funcs {
         return lv;
     }
 
-    LocalVariable GetFirstLocalVariable (NWObject oObject) {
+    public static LocalVariable GetFirstLocalVariable (NWObject oObject) {
         return GetLocalVariableByPosition(oObject, 0);
     }
 
-    LocalVariable GetNextLocalVariable (LocalVariable lv) {
+    public static LocalVariable GetNextLocalVariable (LocalVariable lv) {
         return GetLocalVariableByPosition(lv.obj, lv.pos + 1);
     }
 
-    String DumpLocalVariables (NWObject oObject) {
+    public static String DumpLocalVariables (NWObject oObject) {
         int i, nVariables = GetLocalVariableCount(oObject);
         NWObject oVar;
         NWVector vPos;
@@ -630,31 +630,31 @@ public class NWNX_Funcs {
     }
 
 
-    NWObject GetFirstArea () {
+    public static NWObject GetFirstArea () {
         return NWScript.getLocalObject(NWObject.MODULE, "NWNX!FUNCS!GETFIRSTAREA");
     }
 
-    NWObject GetNextArea () {
+    public static NWObject GetNextArea () {
         return NWScript.getLocalObject(NWObject.MODULE, "NWNX!FUNCS!GETNEXTAREA");
     }
 
-    int SetBaseItemType (NWObject oItem, int nBaseItem)
+    public static int SetBaseItemType (NWObject oItem, int nBaseItem)
     {
         NWScript.setLocalString(oItem, "NWNX!FUNCS!SETBASEITEMTYPE", NWScript.intToString(nBaseItem));
         return NWScript.stringToInt(NWScript.getLocalString(oItem, "NWNX!FUNCS!SETBASEITEMTYPE"));
     }
 
 
-    int SetGoldPieceValue (NWObject oItem, int nValue) {
+    public static int SetGoldPieceValue (NWObject oItem, int nValue) {
         return NWNXFuncsOne(oItem, "NWNX!FUNCS!SETGOLDPIECEVALUE", nValue);
     }
 
-    int SetItemWeight (NWObject oItem, int nTenthLbs) {
+    public static int SetItemWeight (NWObject oItem, int nTenthLbs) {
         return NWNXFuncsOne(oItem, "NWNX!FUNCS!SETITEMWEIGHT", nTenthLbs);
     }
 
 
-    String GetEntireItemAppearance (NWObject oItem) {
+    public static String GetEntireItemAppearance (NWObject oItem) {
         NWScript.setLocalString(oItem, "NWNX!FUNCS!GETENTIREITEMAPPEARANCE", "                                                            ");
         String sApp = NWScript.getLocalString(oItem, "NWNX!FUNCS!GETENTIREITEMAPPEARANCE");
         NWScript.deleteLocalString(oItem, "NWNX!FUNCS!GETENTIREITEMAPPEARANCE");
@@ -662,60 +662,60 @@ public class NWNX_Funcs {
         return sApp;
     }
 
-    void RestoreItemAppearance (NWObject oItem, String sApp) {
+    public static void RestoreItemAppearance (NWObject oItem, String sApp) {
         NWScript.setLocalString(oItem, "NWNX!FUNCS!RESTOREITEMAPPEARANCE", sApp);
         NWScript.deleteLocalString(oItem, "NWNX!FUNCS!RESTOREITEMAPPEARANCE");
     }
 
-    int SetItemAppearance (NWObject oItem, int nIndex, int nValue) {
+    public static int SetItemAppearance (NWObject oItem, int nIndex, int nValue) {
         int nRet = NWNXFuncsTwo(oItem, "NWNX!FUNCS!SETITEMAPPEARANCE", nIndex, nValue);
         NWScript.deleteLocalString(oItem, "NWNX!FUNCS!SETITEMAPPEARANCE");
         return nRet;
     }
 
-    int SetItemColor (NWObject oItem, int nIndex, int nColor) {
+    public static int SetItemColor (NWObject oItem, int nIndex, int nColor) {
         int nRet = NWNXFuncsTwo(oItem, "NWNX!FUNCS!SETITEMCOLOR", nIndex, nColor);
         NWScript.deleteLocalString(oItem, "NWNX!FUNCS!SETITEMCOLOR");
         return nRet;
     }
 
-    int GetIsStatic (NWObject oPlace) {
+    public static int GetIsStatic (NWObject oPlace) {
         int nRet = NWNXFuncsZero(oPlace, "NWNX!FUNCS!GETISSTATIC");
         NWScript.deleteLocalString(oPlace, "NWNX!FUNCS!GETISSTATIC");
         return nRet;
     }
 
-    int SetPlaceableAppearance (NWObject oPlace, int nApp) {
+    public static int SetPlaceableAppearance (NWObject oPlace, int nApp) {
         int nRet = NWNXFuncsOne(oPlace, "NWNX!FUNCS!SETPLACEABLEAPPEARANCE", nApp);
         NWScript.deleteLocalString(oPlace, "NWNX!FUNCS!SETPLACEABLEAPPEARANCE");
         return nRet;
     }
 
 
-    float GetGroundHeight (NWObject oArea, NWVector vPos) {
+    public static float GetGroundHeight (NWObject oArea, NWVector vPos) {
         NWScript.setLocalString(oArea, "NWNX!FUNCS!GETGROUNDHEIGHT",
                 NWScript.floatToString(vPos.getX(), 18, 9) + "¬" + NWScript.floatToString(vPos.getY(), 18, 9) + "¬" +
                         NWScript.floatToString(vPos.getZ(), 18, 9) + "                    ");
         return NWScript.stringToFloat(NWScript.getLocalString(oArea, "NWNX!FUNCS!GETGROUNDHEIGHT"));
     }
 
-    float GetGroundHeightFromLocation (NWLocation lLoc) {
+    public static float GetGroundHeightFromLocation (NWLocation lLoc) {
         return GetGroundHeight(NWScript.getAreaFromLocation(lLoc), NWScript.getPositionFromLocation(lLoc));
     }
 
-    int GetIsWalkable (NWObject oArea, NWVector vPos) {
+    public static int GetIsWalkable (NWObject oArea, NWVector vPos) {
         NWScript.setLocalString(oArea, "NWNX!FUNCS!GETISWALKABLE",
                 NWScript.floatToString(vPos.getX(), 18, 9) + "¬" + NWScript.floatToString(vPos.getY(), 18, 9) + "¬" +
                         NWScript.floatToString(vPos.getZ(), 18, 9) + "                    ");
         return NWScript.stringToInt(NWScript.getLocalString(oArea, "NWNX!FUNCS!GETISWALKABLE"));
     }
 
-    int GetIsWalkableLocation (NWLocation lLoc) {
+    public static int GetIsWalkableLocation (NWLocation lLoc) {
         return GetIsWalkable(NWScript.getAreaFromLocation(lLoc), NWScript.getPositionFromLocation(lLoc));
     }
 
 
-    void ActionUseItem (NWObject oItem, NWObject oTarget, NWLocation lTarget, int nProp, NWObject objSelf) {
+    public static void ActionUseItem (NWObject oItem, NWObject oTarget, NWLocation lTarget, int nProp, NWObject objSelf) {
         NWObject oArea = NWScript.getAreaFromLocation(lTarget);
         NWVector vVec = NWScript.getPositionFromLocation(lTarget);
 
@@ -729,88 +729,93 @@ public class NWNX_Funcs {
                         NWScript.intToString(nProp));
     }
 
-    void ActionUseItemAtLocation (NWObject oItem, NWLocation lTarget, int nProp, NWObject objSelf) {
+    public static void ActionUseItemAtLocation (NWObject oItem, NWLocation lTarget, int nProp, NWObject objSelf) {
         ActionUseItem(oItem, NWObject.INVALID, lTarget, nProp, objSelf);
     }
 
-    void ActionUseItemOnObject (NWObject oItem, NWObject oTarget, int nProp, NWObject objSelf) {
+    public static void ActionUseItemOnObject (NWObject oItem, NWObject oTarget, int nProp, NWObject objSelf) {
         ActionUseItem(oItem, NWObject.INVALID, NWScript.getLocation(oTarget), nProp, objSelf);
     }
 
 
-    int GetPCPort (NWObject oPC) {
+    public static int GetPCPort (NWObject oPC) {
         if (!NWScript.getIsPC(oPC) || NWScript.getIsDMPossessed(oPC))
             return 0;
         return NWNXFuncsZero(oPC, "NWNX!FUNCS!GETPCPORT");
     }
 
-    void BootPCWithMessage (NWObject oPC, int nStrRef) {
+    public static void BootPCWithMessage (NWObject oPC, int nStrRef) {
         NWScript.setLocalString(oPC, "NWNX!FUNCS!BOOTPCWITHMESSAGE", NWScript.intToString(nStrRef));
     }
 
 
-    String GetCreatureEventHandler (NWObject oCreature, int nEvent) {
+    public static String GetCreatureEventHandler (NWObject oCreature, int nEvent) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETCREATUREEVENTHANDLER", NWScript.intToString(nEvent) + "                ");
         return NWScript.getLocalString(oCreature, "NWNX!FUNCS!GETCREATUREEVENTHANDLER");
     }
 
-    String SetCreatureEventHandler (NWObject oCreature, int nEvent, String sScript) {
+    public static String SetCreatureEventHandler (NWObject oCreature, int nEvent, String sScript) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!SETCREATUREEVENTHANDLER", NWScript.intToString(nEvent) + " " + sScript);
         return NWScript.getLocalString(oCreature, "NWNX!FUNCS!SETCREATUREEVENTHANDLER");
     }
 
-    String GetEventHandler (NWObject oObject, int nEvent) {
-        NWScript.setLocalString(oObject, "NWNX!FUNCS!GETEVENTHANDLER", NWScript.intToString(nEvent) + "                ");
-        return NWScript.getLocalString(oObject, "NWNX!FUNCS!GETEVENTHANDLER");
+    public static String GetEventHandler (NWObject oObject, int nEvent) {
+        NWScript.setLocalString(oObject, "NWNX!FUNCSEXT!GETSCRIPT", NWScript.intToString(nEvent)+"                ");
+        String sRet = NWScript.getLocalString(oObject, "NWNX!FUNCSEXT!GETSCRIPT");
+        NWScript.deleteLocalString(oObject, "NWNX!FUNCSEXT!GETSCRIPT");
+        return sRet;
+
     }
 
-    String SetEventHandler (NWObject oObject, int nEvent, String sScript) {
-        NWScript.setLocalString(oObject, "NWNX!FUNCS!SETEVENTHANDLER", NWScript.intToString(nEvent) + " " + sScript);
-        return NWScript.getLocalString(oObject, "NWNX!FUNCS!SETEVENTHANDLER");
+    public static String SetEventHandler (NWObject oObject, int nEvent, String sScript) {
+        NWScript.setLocalString(oObject, "NWNX!FUNCSEXT!SETSCRIPT", NWScript.intToString(nEvent)+":"+sScript+"          ");
+        NWScript.deleteLocalString(oObject, "NWNX!FUNCSEXT!SETSCRIPT");
+        return "";
+
     }
 
-    int GetFactionId (NWObject oObject) {
+    public static int GetFactionId (NWObject oObject) {
         return NWNXFuncsZero(oObject, "NWNX!FUNCS!GETFACTIONID");
     }
 
-    int SetFactionId (NWObject oObject, int nFaction) {
+    public static int SetFactionId (NWObject oObject, int nFaction) {
         return NWNXFuncsOne(oObject, "NWNX!FUNCS!SETFACTIONID", nFaction);
     }
 
-    void SetLastHostileActor (NWObject oObject, NWObject oActor) {
+    public static void SetLastHostileActor (NWObject oObject, NWObject oActor) {
         NWScript.setLocalString(oObject, "NWNX!FUNCS!SETLASTHOSTILEACTOR", "" + oActor.getObjectId());
     }
 
 
-    NWObject GetItemByPosition (NWObject oCreature, int nPos) {
+    public static NWObject GetItemByPosition (NWObject oCreature, int nPos) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!GETITEMBYPOSITIONREQUEST", NWScript.intToString(nPos));
         return NWScript.getLocalObject(oCreature, "NWNX!FUNCS!GETITEMBYPOSITION");
     }
 
-    int GetItemCount (NWObject oCreature) {
+    public static int GetItemCount (NWObject oCreature) {
         return NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETITEMCOUNT");
     }
 
 
-    int SetMovementRate (NWObject oCreature, int nRate) {
+    public static int SetMovementRate (NWObject oCreature, int nRate) {
         if (NWScript.getIsDM(oCreature))
             nRate = MovementRate.DMFast;
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETMOVEMENTRATE", nRate);
     }
 
 
-    int SetRacialType (NWObject oCreature, int nRacialType) {
+    public static int SetRacialType (NWObject oCreature, int nRacialType) {
         return NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETRACIALTYPE", nRacialType);
     }
 
 
-    String SetTag (NWObject oObject, String sTag) {
+    public static String SetTag (NWObject oObject, String sTag) {
         NWScript.setLocalString(oObject, "NWNX!FUNCS!SETTAG", sTag);
         return NWScript.getLocalString(oObject, "NWNX!FUNCS!SETTAG");
     }
 
 
-    String GetPCFileName (NWObject oPC) {
+    public static String GetPCFileName (NWObject oPC) {
         if (!NWScript.getIsPC(oPC))
             return "";
 
@@ -819,12 +824,12 @@ public class NWNX_Funcs {
     }
 
 
-    void JumpToLimbo (NWObject oCreature) {
+    public static void JumpToLimbo (NWObject oCreature) {
         NWScript.setLocalString(oCreature, "NWNX!FUNCS!JUMPTOLIMBO", "          ");
     }
 
 
-    int BroadcastProjectileToObject (NWObject oSource, NWObject oTarget, int nSpellId, int nDelay) {
+    public static int BroadcastProjectileToObject (NWObject oSource, NWObject oTarget, int nSpellId, int nDelay) {
         if (!NWScript.getIsObjectValid(oTarget))
             return 0;
 
@@ -845,7 +850,7 @@ public class NWNX_Funcs {
         return NWScript.stringToInt(NWScript.getLocalString(oSource, "NWNX!FUNCS!BROADCASTPROJECTILE"));
     }
 
-    int BroadcastProjectileToLocation (NWObject oSource, NWLocation lTarget, int nSpellId, int nDelay) {
+    public static int BroadcastProjectileToLocation (NWObject oSource, NWLocation lTarget, int nSpellId, int nDelay) {
         NWVector vTarget = NWScript.getPositionFromLocation(lTarget);
 
         if (nDelay < 0) {
@@ -862,39 +867,39 @@ public class NWNX_Funcs {
     }
 
 
-    int SetIsCreatureDisarmable(NWObject oCreature, int bDisarmable)
+    public static int SetIsCreatureDisarmable(NWObject oCreature, int bDisarmable)
     {
         int nRet = NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETISCREATUREDISARMABLE", (bDisarmable != 0) ? 1 : 0);
         NWScript.deleteLocalString(oCreature, "NWNX!FUNCS!SETISCREATUREDISARMABLE");
         return nRet;
     }
 
-    int SetCorpseDecayTime(NWObject oCreature, int nTime)
+    public static int SetCorpseDecayTime(NWObject oCreature, int nTime)
     {
         int nRet = NWNXFuncsOne(oCreature, "NWNX!FUNCS!SETCORPSEDECAYTIME", nTime);
         NWScript.deleteLocalString(oCreature, "NWNX!FUNCS!SETCORPSEDECAYTIME");
         return nRet;
     }
 
-    int GetCorpseDecayTime(NWObject oCreature)
+    public static int GetCorpseDecayTime(NWObject oCreature)
     {
         int nRet = NWNXFuncsZero(oCreature, "NWNX!FUNCS!GETCORPSEDECAYTIME");
         NWScript.deleteLocalString(oCreature, "NWNX!FUNCS!GETCORPSEDECAYTIME");
         return nRet;
     }
 
-    NWObject IntToObject (int nObjectId) {
+    public static NWObject IntToObject (int nObjectId) {
         NWScript.setLocalString(NWObject.MODULE, "NWNX!FUNCS!INTTOOBJECTREQUEST", NWScript.intToString(nObjectId));
         return NWScript.getLocalObject(NWObject.MODULE, "NWNX!FUNCS!INTTOOBJECT");
     }
 
-    NWObject StringToObject (String sObjectId) {
+    public static NWObject StringToObject (String sObjectId) {
         NWScript.setLocalString(NWObject.MODULE, "NWNX!FUNCS!STRINGTOOBJECTREQUEST", sObjectId);
         return NWScript.getLocalObject(NWObject.MODULE, "NWNX!FUNCS!INTTOOBJECT");
     }
 
 
-    void DumpObject (NWObject oObject) {
+    public static void DumpObject (NWObject oObject) {
         NWScript.setLocalString(oObject, "NWNX!FUNCS!DUMPOBJECT", "          ");
     }
 

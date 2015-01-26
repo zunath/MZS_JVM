@@ -7,8 +7,8 @@ import org.nwnx.nwnx2.jvm.constants.*;
 @SuppressWarnings("UnusedDeclaration")
 public class Module_OnActivateItem implements IScriptEventHandler {
 	@Override
-	public void runScript(NWObject objSelf) {
-		NWObject oPC = NWScript.getItemActivator();
+	public void runScript(final NWObject objSelf) {
+		final NWObject oPC = NWScript.getItemActivator();
 		NWObject oItem = NWScript.getItemActivated();
 		NWObject oItem2;
 		NWObject oInfection = NWScript.getItemPossessedBy(oPC, "out_infection");
@@ -24,7 +24,6 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		String sCure = NWScript.getStringLeft(sItemTag, 5);
 		String sTag = NWScript.getTag(oArea);
 
-		int iArmor1;
 		int iArmor2;
 
 		NWLocation lPCLocation = NWScript.getLocation(oPC);
@@ -112,7 +111,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		if (sItemTag.equals("makeshiftarmo001")) {
 
 			if (NWScript.getBaseItemType(oTarget) == BaseItem.ARMOR) {
-				iArmor1 = NWScript.getItemACValue(oTarget);
+				int iArmor1 = NWScript.getItemACValue(oTarget);
 				iArmor2 = 0;
 
 				if (NWScript.getLocalInt(oTarget, "ArmorMakeshiftUpgraded1") == 1) {
@@ -208,9 +207,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 			Scheduler.delay(oPC, 30, new Runnable() {
 				public void run() {
-					NWScript.setStandardFactionReputation(
-							StandardFaction.HOSTILE, 0,
-							NWScript.getItemActivator());
+					NWScript.setStandardFactionReputation(StandardFaction.HOSTILE, 0, oPC);
 				}
 			});
 			Scheduler.flushQueues();
@@ -247,9 +244,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 				Scheduler.assign(oPC, new Runnable() {
 					public void run() {
-						NWScript.actionStartConversation(
-								NWScript.getItemActivator(), "dm_wand_item",
-								true, false);
+						NWScript.actionStartConversation(oPC, "dm_wand_item", true, false);
 					}
 				});
 				Scheduler.flushQueues();
@@ -265,9 +260,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		if (sItemTag.equals("pc_mutationsyn")) {
 			Scheduler.assign(oPC, new Runnable() {
 				public void run() {
-					NWScript.actionStartConversation(
-							NWScript.getItemActivator(), "mzs3_pcmutation",
-							true, false);
+					NWScript.actionStartConversation(oPC, "mzs3_pcmutation", true, false);
 				}
 			});
 			Scheduler.flushQueues();
@@ -285,9 +278,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 		else if (sItemTag.equals("DyeKit")) {
 			Scheduler.assign(oPC, new Runnable() {
 				public void run() {
-					NWScript.actionStartConversation(
-							NWScript.getItemActivator(), "dye_dyekit", true,
-							false);
+					NWScript.actionStartConversation(oPC, "dye_dyekit", true, false);
 				}
 			});
 			Scheduler.flushQueues();
@@ -315,8 +306,7 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 
 				Scheduler.assign(oPC, new Runnable() {
 					public void run() {
-						NWObject waypoint = NWScript.getObjectByTag(
-								"AFK_AREA_Spawn", 0);
+						NWObject waypoint = NWScript.getObjectByTag("AFK_AREA_Spawn", 0);
 						NWScript.jumpToObject(waypoint, false);
 					}
 				});
@@ -328,13 +318,27 @@ public class Module_OnActivateItem implements IScriptEventHandler {
 			return;
 		}
 
-		// CNR Tra
-		NWScript.executeScript("cnr_module_onact", objSelf);
+		if(sItemTag.equals("sly_musicwand"))
+		{
+			Scheduler.assign(oPC, new Runnable() {
+				@Override
+				public void run() {
+					NWScript.actionStartConversation(oPC, "sly_music_conv", true, false);
+				}
+			});
+		}
 
-		// d20
-		NWScript.executeScript("d20_on_activate", objSelf);
 
-		// Bioware Default
-		NWScript.executeScript("x2_mod_def_act", objSelf);
+		RunScripts(objSelf);
 	}
+
+	private static void RunScripts(final NWObject objSelf)
+	{
+		NWObject oActivator = NWScript.getItemActivator();
+
+		NWScript.executeScript("cnr_module_onact", objSelf); // CNR Crafting
+		NWScript.executeScript("dmfi_activate", oActivator); // DMFI
+		NWScript.executeScript("x2_mod_def_act", objSelf); // Bioware Default
+	}
+
 }

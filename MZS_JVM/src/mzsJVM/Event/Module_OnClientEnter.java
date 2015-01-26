@@ -2,8 +2,9 @@ package mzsJVM.Event;
 
 import mzsJVM.Constants;
 import mzsJVM.Data.ItemDTO;
-import mzsJVM.GameObject.CreatureGO;
+import mzsJVM.GameObject.PlayerGO;
 import mzsJVM.IScriptEventHandler;
+import mzsJVM.Repository.PlayerRepository;
 import org.nwnx.nwnx2.jvm.*;
 import org.nwnx.nwnx2.jvm.constants.*;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
 
     private void InitializeNewCharacter(final NWObject oPC)
     {
-        CreatureGO pcGO = new CreatureGO(oPC);
+        PlayerGO pcGO = new PlayerGO(oPC);
         pcGO.destroyAllEquippedItems();
         pcGO.destroyAllInventoryItems();
 
@@ -126,12 +127,21 @@ public class Module_OnClientEnter implements IScriptEventHandler {
 
     private void ApplyPCVariables(NWObject oPC)
     {
+        if(!NWScript.getIsPC(oPC) || NWScript.getIsDM(oPC)) return;
+
+        PlayerGO pcGameObject = new PlayerGO(oPC);
         NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
 
         // Uniquely generated ID
         if(NWScript.getLocalString(oDatabase, Constants.PCIDNumberVariable).equals(""))
         {
-            NWScript.setLocalString(oDatabase, Constants.PCIDNumberVariable, UUID.randomUUID().toString());
+            String uuid = UUID.randomUUID().toString();
+            NWScript.setLocalString(oDatabase, Constants.PCIDNumberVariable, uuid);
+
+            // Save PC info to database.
+            PlayerRepository repo = new PlayerRepository();
+            repo.save(pcGameObject.createEntity());
+
         }
 
         // Utilized by d20_on_equip. If this variable is not detected
@@ -189,19 +199,19 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         String pcName = NWScript.getName(oPC, false);
 
         ArrayList<ItemDTO> items = new ArrayList<ItemDTO>();
-        items.add(new ItemDTO("dmfi_pc_dicebag", "dmfi_pc_dicebag", 1, ""));
-        items.add(new ItemDTO("dmfi_pc_follow", "dmfi_pc_follow", 1, ""));
-        items.add(new ItemDTO("pcemotewidget", "dmfi_pc_emote", 1, ""));
-        items.add(new ItemDTO("mzs2_itemdestroy", "mzs2_itemdestroy", 1, ""));
-        items.add(new ItemDTO("out_infection", "out_infection", 1, ""));
-        items.add(new ItemDTO("out_infchecker", "out_infchecker", 1, ""));
-        items.add(new ItemDTO("td_it_quillpen", "td_it_quillpen", 5, ""));
-        items.add(new ItemDTO("badgebook", "badgebook", 1, "%s's Journal of Badges and Achievements"));
-        items.add(new ItemDTO("mil_dyekit001", "DyeKit", 1, ""));
-        items.add(new ItemDTO("_mdrn_it_reload", "_mdrn_it_reload_pc", 1, ""));
-        items.add(new ItemDTO("afkplayertool", "AFKPlayerTool", 1, ""));
-        items.add(new ItemDTO("survivor_guide", "survivor_guide", 1, ""));
-        items.add(new ItemDTO("water_canteen", "water_canteen", 1, ""));
+        items.add(new ItemDTO("dmfi_pc_dicebag", "dmfi_pc_dicebag", 1, "", true));
+        items.add(new ItemDTO("dmfi_pc_follow", "dmfi_pc_follow", 1, "", true));
+        items.add(new ItemDTO("pcemotewidget", "dmfi_pc_emote", 1, "", true));
+        items.add(new ItemDTO("mzs2_itemdestroy", "mzs2_itemdestroy", 1, "", true));
+        items.add(new ItemDTO("out_infection", "out_infection", 1, "", false));
+        items.add(new ItemDTO("out_infchecker", "out_infchecker", 1, "", true));
+        items.add(new ItemDTO("td_it_quillpen", "td_it_quillpen", 5, "", true));
+        items.add(new ItemDTO("badgebook", "badgebook", 1, "%s's Journal of Badges and Achievements", false));
+        items.add(new ItemDTO("mil_dyekit001", "DyeKit", 1, "", true));
+        items.add(new ItemDTO("_mdrn_it_reload", "_mdrn_it_reload_pc", 1, "", true));
+        items.add(new ItemDTO("afkplayertool", "AFKPlayerTool", 1, "", true));
+        items.add(new ItemDTO("survivor_guide", "survivor_guide", 1, "", true));
+        items.add(new ItemDTO("water_canteen", "water_canteen", 1, "", true));
 
         for(ItemDTO item : items)
         {
@@ -216,8 +226,10 @@ public class Module_OnClientEnter implements IScriptEventHandler {
 
             if(!NWScript.getIsObjectValid(oItem) || version < item.GetVersion())
             {
-                NWScript.destroyObject(oItem, 0.0f);
-                oItem = NWScript.createItemOnObject(item.GetResref(), oPC, 1, "");
+                if(item.GetReplace()) {
+                    NWScript.destroyObject(oItem, 0.0f);
+                    oItem = NWScript.createItemOnObject(item.GetResref(), oPC, 1, "");
+                }
 
                 NWScript.setDroppableFlag(oItem, false);
                 NWScript.setItemCursedFlag(oItem, true);

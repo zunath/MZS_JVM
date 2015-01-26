@@ -12,121 +12,103 @@ import java.util.Date;
 public class PlayerEntity {
 
     @Id
-    @Column(name="PlayerCharacterID")
-    private int _pcID;
-
-    @Column(name="AccountName")
-    private String _accountName;
-    @Column(name="CDKey")
-    private String _cdKey;
+    @Column(name="PlayerID")
+    private String pcID;
     @Column(name="CharacterName")
-    private String _characterName;
+    private String characterName;
     @Column(name="HitPoints")
-    private int _hitPoints;
+    private int hitPoints;
     @Column(name="LocationAreaTag")
-    private String _locationAreaTag;
+    private String locationAreaTag;
     @Column(name="LocationX")
-    private float _locationX;
+    private double locationX;
     @Column(name="LocationY")
-    private float _locationY;
+    private double locationY;
     @Column(name="LocationZ")
-    private float _locationZ;
+    private double locationZ;
     @Column(name="LocationOrientation")
-    private float _locationOrientation;
+    private double locationOrientation;
     @Column(name="CreateTimestamp")
-    private Date _createTimestamp;
+    private Date createTimestamp;
+
 
     public PlayerEntity()
     {
 
     }
 
-
-    public int getPCID() {
-        return _pcID;
+    public String getPCID()
+    {
+        return pcID;
     }
 
-    public void setPCID(int _pcID) {
-        this._pcID = _pcID;
-    }
-
-    public String getAccountName() {
-        return _accountName;
-    }
-
-    public void setAccountName(String _accountName) {
-        this._accountName = _accountName;
-    }
-
-    public String getCDKey() {
-        return _cdKey;
-    }
-
-    public void setCDKey(String _cdKey) {
-        this._cdKey = _cdKey;
+    public void setPCID(String pcID)
+    {
+        this.pcID = pcID;
     }
 
     public String getCharacterName() {
-        return _characterName;
+        return characterName;
     }
 
     public void setCharacterName(String _characterName) {
-        this._characterName = _characterName;
+        this.characterName = _characterName;
     }
 
     public int getHitPoints() {
-        return _hitPoints;
+        return hitPoints;
     }
 
     public void setHitPoints(int _hitPoints) {
-        this._hitPoints = _hitPoints;
+        this.hitPoints = _hitPoints;
     }
 
     public String getLocationAreaTag() {
-        return _locationAreaTag;
+        return locationAreaTag;
     }
 
     public void setLocationAreaTag(String _locationAreaTag) {
-        this._locationAreaTag = _locationAreaTag;
+        this.locationAreaTag = _locationAreaTag;
     }
 
-    public float getLocationX() {
-        return _locationX;
+    public double getLocationX() {
+        return locationX;
     }
 
     public void setLocationX(float _locationX) {
-        this._locationX = _locationX;
+        this.locationX = _locationX;
     }
 
-    public float getLocationY() {
-        return _locationY;
+    public double getLocationY() {
+        return locationY;
     }
 
     public void setLocationY(float _locationY) {
-        this._locationY = _locationY;
+        this.locationY = _locationY;
     }
 
-    public float getLocationZ() {
-        return _locationZ;
+    public double getLocationZ() {
+        return locationZ;
     }
 
     public void setLocationZ(float _locationZ) {
-        this._locationZ = _locationZ;
+        this.locationZ = _locationZ;
     }
 
-    public float getLocationOrientation() {
-        return _locationOrientation;
+    public double getLocationOrientation() {
+        return locationOrientation;
     }
 
     public void setLocationOrientation(float _locationOrientation) {
-        this._locationOrientation = _locationOrientation;
+        this.locationOrientation = _locationOrientation;
     }
 
     public Date getCreateTimestamp() {
-        return _createTimestamp;
+        return createTimestamp;
     }
 
     public void setCreateTimestamp(Date _createTimestamp) {
-        this._createTimestamp = _createTimestamp;
+        this.createTimestamp = _createTimestamp;
     }
+
 }
