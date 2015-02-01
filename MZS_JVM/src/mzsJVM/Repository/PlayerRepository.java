@@ -18,7 +18,7 @@ public class PlayerRepository {
                     .createCriteria(PlayerEntity.class);
 
             entity = (PlayerEntity)criteria
-                    .add(Restrictions.eq("uuid", uuid))
+                    .add(Restrictions.eq("pcID", uuid))
                     .uniqueResult();
 
         }

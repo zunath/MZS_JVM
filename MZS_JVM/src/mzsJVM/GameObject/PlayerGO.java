@@ -25,7 +25,8 @@ public class PlayerGO {
 
     public PlayerEntity createEntity()
     {
-        String uuid = NWScript.getLocalString(_pc, Constants.PCIDNumberVariable);
+        NWObject database = NWScript.getItemPossessedBy(_pc, Constants.PCDatabaseTag);
+        String uuid = NWScript.getLocalString(database, Constants.PCIDNumberVariable);
         NWLocation location = NWScript.getLocation(_pc);
 
         PlayerEntity entity = new PlayerEntity();

@@ -2,6 +2,7 @@ package mzsJVM.Event;
 
 import mzsJVM.Constants;
 import mzsJVM.Data.ItemDTO;
+import mzsJVM.Entities.PlayerEntity;
 import mzsJVM.GameObject.PlayerGO;
 import mzsJVM.IScriptEventHandler;
 import mzsJVM.Repository.PlayerRepository;
@@ -39,7 +40,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         AddJournalEntries(oPC);
         GiveSystemItems(oPC);
         ValidateCharacter(oPC);
-        //LoadHitPoints(oPC);
+        LoadHitPoints(oPC);
 
         NWScript.floatingTextStringOnCreature("Welcome to Modern Zombie Survival 3!", oPC, false);
         NWScript.floatingTextStringOnCreature("Please read your journal and survival guide for module information!", oPC, false);
@@ -265,7 +266,10 @@ public class Module_OnClientEnter implements IScriptEventHandler {
             return;
         }
 
-        int iStoredHP = NWScript.getLocalInt(oDatabase, "PHP_STORED_HP");
+        String uuid = NWScript.getLocalString(oDatabase, Constants.PCIDNumberVariable);
+        PlayerRepository repo = new PlayerRepository();
+        PlayerEntity entity = repo.getByUUID(uuid);
+        int iStoredHP = entity.getHitPoints();
         int iDamage;
 
         // If the stored HP is in the negatives, we need to bring the PC down to 0 HP, and then apply the HP
