@@ -17,6 +17,9 @@ public class Module_OnClientLeave implements IScriptEventHandler {
 	}
 
 	private void SaveCharacter(NWObject pc) {
+
+		if(NWScript.getIsDM(pc)) return;
+
 		PlayerGO gameObject = new PlayerGO(pc);
 		PlayerRepository repo = new PlayerRepository();
 		String uuid = gameObject.getUUID();
