@@ -8,6 +8,7 @@ public class Module_OnHeartbeat implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {
 
+		SaveCharacters();
 		if (NWScript.getLocalInt(NWObject.MODULE, "sWeathersChange") == NWScript.getTimeHour()) return;
 
 		NWScript.deleteLocalInt(NWObject.MODULE, "sWeathersChange");
@@ -22,5 +23,20 @@ public class Module_OnHeartbeat implements IScriptEventHandler {
 			NWScript.setWeather(NWObject.MODULE, Weather.CLEAR);
 		}
 	}
+
+	// Export all characters every minute.
+	private void SaveCharacters()
+	{
+		int currentTick = NWScript.getLocalInt(NWObject.MODULE, "SAVE_CHARACTERS_TICK") + 1;
+
+		if(currentTick >= 10)
+		{
+			NWScript.exportAllCharacters();
+			currentTick = 0;
+		}
+
+		NWScript.setLocalInt(NWObject.MODULE, "SAVE_CHARACTERS_TICK", currentTick);
+	}
+
 }
 
