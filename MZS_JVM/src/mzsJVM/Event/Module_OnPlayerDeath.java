@@ -9,7 +9,6 @@ public class Module_OnPlayerDeath implements IScriptEventHandler {
 	public void runScript(NWObject objSelf) {
 		NWObject oPC = NWScript.getLastPlayerDied();
 		NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
-		int iIDNumber = NWScript.getLocalInt(oDatabase, "ID_NUMBER");
 		NWObject oDead = NWScript.getItemPossessedBy(oPC, "death_token");
 
 		// ROTD death system

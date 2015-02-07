@@ -43,11 +43,8 @@ public class Player_OnHeartbeat implements IScriptEventHandler {
             }
             else if (iHealTime >= 10)
             {
-                if (NWScript.getDistanceBetween(objSelf, NWScript.getNearestObjectByTag("heal_station", objSelf, 0)) <= 6.0 && NWScript.getNearestObjectByTag("rotd_campfire", objSelf, 0) != NWObject.INVALID)
-                {iHPRegen = iHPRegen + 2;}
                 NWScript.applyEffectToObject(Duration.TYPE_INSTANT, NWScript.effectHeal(iHPRegen), objSelf, 0.0f);
                 NWScript.setLocalInt(oDatabase, "HEAL_TIME", 0);
-                //SendMessageToPC(oPC, "HP Regen: " + IntToString(iHPRegen));
             }
         }
 
