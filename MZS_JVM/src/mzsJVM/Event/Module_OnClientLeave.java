@@ -26,6 +26,11 @@ public class Module_OnClientLeave implements IScriptEventHandler {
 		NWLocation location = NWScript.getLocation(pc);
 
 		PlayerEntity entity = repo.getByUUID(uuid);
+        if(entity == null)
+        {
+            return;
+        }
+
 		entity.setCharacterName(NWScript.getName(pc, false));
 		entity.setHitPoints(NWScript.getCurrentHitPoints(pc));
 		entity.setLocationAreaTag(NWScript.getTag(NWScript.getArea(pc)));
