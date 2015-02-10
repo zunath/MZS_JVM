@@ -231,11 +231,16 @@ public class Module_OnClientEnter implements IScriptEventHandler {
                     NWScript.destroyObject(oItem, 0.0f);
                     oItem = NWScript.createItemOnObject(item.GetResref(), oPC, 1, "");
                 }
+                else if(!NWScript.getIsObjectValid(oItem))
+                {
+                    oItem = NWScript.createItemOnObject(item.GetResref(), oPC, 1, "");
+                }
 
                 NWScript.setDroppableFlag(oItem, false);
                 NWScript.setItemCursedFlag(oItem, true);
 
                 NWScript.setLocalInt(oItem, "MZS2_ITEM_VERSION", item.GetVersion());
+
 
                 // Rename the item only if a format has been specified.
                 if(!item.GetNameFormat().equals(""))
