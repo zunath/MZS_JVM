@@ -10,11 +10,12 @@ public class Module_OnPlayerUnEquipItem implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {
 
-		NWObject oPC   = NWScript.getPCItemLastUnequippedBy();
+		final NWObject oPC   = NWScript.getPCItemLastUnequippedBy();
 		NWObject oItem = NWScript.getPCItemLastUnequipped();
 		NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
 		NWObject oWeapon = NWScript.getItemInSlot(InventorySlot.RIGHTHAND, oPC);
 		NWObject oOffHand = NWScript.getItemInSlot(InventorySlot.LEFTHAND, oPC);
+        String sTag = NWScript.getTag(oItem);
 
 		int iIdentification1;
 		int iIdentification2;
@@ -101,6 +102,18 @@ public class Module_OnPlayerUnEquipItem implements IScriptEventHandler {
 			}
 			NWScript.setLocalInt(oDatabase, "DualGunsEffect1", -1);
 		}
-		
+
+
+        if(sTag.equals("Injury"))
+        {
+            Scheduler.assign(oPC, new Runnable() {
+                @Override
+                public void run() {
+                    NWScript.clearAllActions(false);
+                    NWScript.actionEquipItem(oPC, InventorySlot.LEFTRING);
+                }
+            });
+        }
+
 	}
 }
