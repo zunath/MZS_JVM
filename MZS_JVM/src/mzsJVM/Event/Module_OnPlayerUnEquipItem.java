@@ -11,7 +11,7 @@ public class Module_OnPlayerUnEquipItem implements IScriptEventHandler {
 	public void runScript(NWObject objSelf) {
 
 		final NWObject oPC   = NWScript.getPCItemLastUnequippedBy();
-		NWObject oItem = NWScript.getPCItemLastUnequipped();
+		final NWObject oItem = NWScript.getPCItemLastUnequipped();
 		NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
 		NWObject oWeapon = NWScript.getItemInSlot(InventorySlot.RIGHTHAND, oPC);
 		NWObject oOffHand = NWScript.getItemInSlot(InventorySlot.LEFTHAND, oPC);
@@ -110,7 +110,7 @@ public class Module_OnPlayerUnEquipItem implements IScriptEventHandler {
                 @Override
                 public void run() {
                     NWScript.clearAllActions(false);
-                    NWScript.actionEquipItem(oPC, InventorySlot.LEFTRING);
+                    NWScript.actionEquipItem(oItem, InventorySlot.LEFTRING);
                 }
             });
         }
