@@ -1,6 +1,7 @@
 package mzsJVM.Event;
 
 import mzsJVM.Constants;
+import mzsJVM.GameObject.PlayerGO;
 import mzsJVM.IScriptEventHandler;
 import org.nwnx.nwnx2.jvm.NWObject;
 import org.nwnx.nwnx2.jvm.NWScript;
@@ -13,9 +14,11 @@ public class Player_OnHeartbeat implements IScriptEventHandler {
 
         if (!NWScript.getIsPC(objSelf) || NWScript.getIsDM(objSelf)) {return;}
 
+        PlayerGO pcGO = new PlayerGO(objSelf);
         NWObject oArea = NWScript.getArea(objSelf);
 
-        if(NWScript.getLocalInt(oArea, "IGNORE_PC_TIMERS") == 1)
+        if(NWScript.getLocalInt(oArea, "IGNORE_PC_TIMERS") == 1 ||
+                pcGO.getUUID().equals(""))
         {
             return;
         }
