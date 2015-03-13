@@ -213,7 +213,7 @@ public class Module_OnClientEnter implements IScriptEventHandler {
         items.add(new ItemDTO("afkplayertool", "AFKPlayerTool", 1, "", true));
         items.add(new ItemDTO("survivor_guide", "survivor_guide", 1, "", true));
         items.add(new ItemDTO("water_canteen", "water_canteen", 1, "", true));
-        items.add(new ItemDTO("subdualmodetog", "subdualmodetog", 1, "", true));
+        items.add(new ItemDTO("subdualmodetog", "SubdualModeTog", 1, "", true));
 
         for(ItemDTO item : items)
         {
