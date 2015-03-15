@@ -8,35 +8,18 @@ import org.nwnx.nwnx2.jvm.constants.*;
 public class Module_OnPlayerDying implements IScriptEventHandler {
 	@Override
 	public void runScript(NWObject objSelf) {
-		NWObject oPC = NWScript.getLastPlayerDying();
+		final NWObject oPC = NWScript.getLastPlayerDying();
 		NWObject oDatabase = NWScript.getItemPossessedBy(oPC, Constants.PCDatabaseTag);
 
 		if (NWScript.getLocalInt(oDatabase, "zombified") == 1) return;
-		BleedProcess(objSelf);
 
+        NWScript.setLocalInt(oPC, "iPCDCC", 0);
+        Bleed(oPC, 1);
 	}
 
-	private void BleedProcess(final NWObject objSelf) {
-		NWObject oDying = NWScript.getLastPlayerDying();
-		NWScript.setLocalObject(oDying, "PCName", oDying);
-		NWScript.setLocalInt(oDying, "iPCDCC", 0);
-
-		Scheduler.assign(oDying, new Runnable() {
-			@Override
-			public void run() {
-				NWScript.clearAllActions(false);
-				Bleed(objSelf, 1);
-			}
-		});
-		Scheduler.flushQueues();
-	}
-
-
-	private void Bleed(final NWObject objSelf, int iBleedAmt)
+	private void Bleed(final NWObject oPC, int iBleedAmt)
 	{
-		NWObject oDying = NWScript.getLocalObject(objSelf, "PCName");
-		//SendMessageToPC(oDying, "Death status: " + IntToString(GetLocalInt(GetItemPossessedBy(oDying, "database"), "DEAD"))); // DEBUG
-		int iDCC = NWScript.getLocalInt(oDying, "iPCDCC");
+		int iDCC = NWScript.getLocalInt(oPC, "iPCDCC");
 		iDCC = iDCC + 1;
 		int iDC;
 		int iDCBase = 16; /* Decrease/increase this value to lower/raise the base DC. */
@@ -52,7 +35,7 @@ public class Module_OnPlayerDying implements IScriptEventHandler {
 		NWEffect eBleedEff;
 
     /* keep executing recursively until character is dead or at +1 hit points */
-		if (NWScript.getCurrentHitPoints(objSelf) <= 0)
+		if (NWScript.getCurrentHitPoints(oPC) <= 0)
 		{
 
         /* a positive bleeding amount means damage, otherwise heal the character */
@@ -65,50 +48,50 @@ public class Module_OnPlayerDying implements IScriptEventHandler {
 				eBleedEff = NWScript.effectHeal(-iBleedAmt);  /* note the negative sign */
 			}
 
-			NWScript.applyEffectToObject(Duration.TYPE_INSTANT, eBleedEff, oDying, 0.0f);
+			NWScript.applyEffectToObject(Duration.TYPE_INSTANT, eBleedEff, oPC, 0.0f);
 
         /* -10 hit points is the death threshold, at or beyond it the character dies */
-			if (NWScript.getCurrentHitPoints(objSelf) <= -10)
+			if (NWScript.getCurrentHitPoints(oPC) <= -10)
 			{
-				NWScript.playVoiceChat(VoiceChat.DEATH, objSelf); /* scream one last time */
-				NWScript.applyEffectToObject(Duration.TYPE_INSTANT, NWScript.effectVisualEffect(VfxImp.DEATH, false), objSelf, 0.0f); /* make death dramatic */
-				NWScript.applyEffectToObject(Duration.TYPE_INSTANT, NWScript.effectDeath(false, true), oDying, 0.0f); /* now kill them */
+				NWScript.playVoiceChat(VoiceChat.DEATH, oPC); /* scream one last time */
+				NWScript.applyEffectToObject(Duration.TYPE_INSTANT, NWScript.effectVisualEffect(VfxImp.DEATH, false), oPC, 0.0f); /* make death dramatic */
+				NWScript.applyEffectToObject(Duration.TYPE_INSTANT, NWScript.effectDeath(false, true), oPC, 0.0f); /* now kill them */
 				return;
 			}
 
 			if (iBleedAmt > 0)  /* only check if character has not stablized */
 			{
-				int iConBonus = NWScript.getAbilityModifier(Ability.CONSTITUTION, oDying);
+				int iConBonus = NWScript.getAbilityModifier(Ability.CONSTITUTION, oPC);
 				int iStableRoll = NWScript.random(21) + iConBonus;
 				if(iStableRoll >= iDC)
 				{
 					iBleedAmt = -iBleedAmt; /* reverse the bleeding process */
-					NWScript.playVoiceChat(VoiceChat.LAUGH, objSelf); /* laugh at death -- this time */
-					NWScript.sendMessageToPC(oDying, "You have stabilized and have begun to heal.");
+					NWScript.playVoiceChat(VoiceChat.LAUGH, oPC); /* laugh at death -- this time */
+					NWScript.sendMessageToPC(oPC, "You have stabilized and have begun to heal.");
 				}
 				else
 				{
-					NWScript.sendMessageToPC(oDying, "You have failed to stabilize in round: " + NWScript.intToString(iDCC) + ".");
+					NWScript.sendMessageToPC(oPC, "You have failed to stabilize in round: " + NWScript.intToString(iDCC) + ".");
 					switch (NWScript.random(6))
 					{
-						case 0: NWScript.playVoiceChat(VoiceChat.PAIN1, objSelf); break;
-						case 1: NWScript.playVoiceChat(VoiceChat.PAIN2, objSelf); break;
-						case 2: NWScript.playVoiceChat(VoiceChat.PAIN3, objSelf); break;
-						case 3: NWScript.playVoiceChat(VoiceChat.HEALME, objSelf); break;
-						case 4: NWScript.playVoiceChat(VoiceChat.NEARDEATH, objSelf); break;
-						case 5: NWScript.playVoiceChat(VoiceChat.HELP, objSelf);
+						case 0: NWScript.playVoiceChat(VoiceChat.PAIN1, oPC); break;
+						case 1: NWScript.playVoiceChat(VoiceChat.PAIN2, oPC); break;
+						case 2: NWScript.playVoiceChat(VoiceChat.PAIN3, oPC); break;
+						case 3: NWScript.playVoiceChat(VoiceChat.HEALME, oPC); break;
+						case 4: NWScript.playVoiceChat(VoiceChat.NEARDEATH, oPC); break;
+						case 5: NWScript.playVoiceChat(VoiceChat.HELP, oPC); break;
 					}
 				}
 			}
 
-			if (NWScript.getCurrentHitPoints(objSelf) <= 0) {
-				NWScript.setLocalInt(oDying, "iPCDCC", iDC);
+			if (NWScript.getCurrentHitPoints(oPC) <= 0) {
+				NWScript.setLocalInt(oPC, "iPCDCC", iDC);
 
 				final int nextBleed = iBleedAmt;
-				Scheduler.delay(objSelf, 6000, new Runnable() {
+				Scheduler.delay(oPC, 6000, new Runnable() {
 					@Override
 					public void run() {
-						Bleed(objSelf, nextBleed);
+						Bleed(oPC, nextBleed);
 					}
 				});
 				Scheduler.flushQueues();
